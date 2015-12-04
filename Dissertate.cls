@@ -14,6 +14,8 @@
 \LoadClass[12pt, oneside, letterpaper]{book}
 
 % Text layout.
+\RequirePackage{amssymb}
+\RequirePackage{mathspec}
 \RequirePackage[width=5.75in, letterpaper]{geometry}
 \usepackage{ragged2e}
 \RaggedRight
@@ -29,8 +31,6 @@
 \RequirePackage{color}
 \usepackage{hyperref}
 \RequirePackage{url}
-\RequirePackage{amssymb}
-\RequirePackage{mathspec}
 \setmathsfont(Digits,Latin,Greek)[Numbers={Proportional}]{EB Garamond}
 \setmathrm{EB Garamond}
 \widowpenalty=300

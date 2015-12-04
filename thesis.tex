@@ -1,3 +1,4 @@
+
 %!TEX TS-program = xelatex
 %!TEX encoding = UTF-8 Unicode
 
@@ -9,6 +10,9 @@
 \input{frontmatter/personalize}
 \maketitle
 %\copyrightpage
+
+% Force all citations to show up in references
+\nocite{*}
 
 \setstretch{1.2}
 \abstractpage
@@ -22,7 +26,7 @@
 % include each chapter...
 \setcounter{chapter}{-1}  % start chapter numbering at 0
 \include{chapters/introduction}
-\include{chapters/chapter1}
+%\include{chapters/chapter1}
 %\include{chapters/chapter2}
 %\include{chapters/chapter3}
 %\include{chapters/conclusion}
@@ -34,7 +38,7 @@
 %
 % the back matter
 \clearpage
-\bibliography{references}
+\bibliography{VVT_Thesis_References}
 \addcontentsline{toc}{chapter}{References}
 \bibliographystyle{apalike2}
 

@@ -1,0 +1,10 @@
+# All Latexian temp files
+TSW*
+
+# All TeX temp files
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
