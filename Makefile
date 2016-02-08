@@ -13,3 +13,13 @@ pdf:
 xelatex: ; $(xelatex) $(xelatex_flats) $(filename)
 
 bibtex: ; $(bibtex) $(filename)
+
+clean:
+	rm -f *.aux
+	rm -f *.log
+	rm -f *.bbl
+	rm -f *.blg
+	rm -f *.out
+	rm -f *.toc
+	rm -f TSWLatexianTemp*
+
