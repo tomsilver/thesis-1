@@ -28,57 +28,13 @@
 % include each chapter...
 \setcounter{chapter}{0}  % start chapter numbering at 1
 
-\chapter{Introduction}
-\label{introduction}
-
-Much of the recent history of genome editing consists of building the site-specificity of a nuclease through engineered protein-DNA interactions. Though this technique has proven effective and useful, as seen in the examples of Zinc-Finger Nucleases (ZFNs) and Transcription Activator-Like Effector Nucleases (TALENs), these platforms are difficult to use because of the complexity of programming protein-DNA specificity.
-In recent years, the CRISPR-Cas system, adapted from the CRISPR bacterial antiviral immune system, has been extensively used as a genome engineering alternative that relies on RNA-DNA complementarity as the homing interaction that guides the specificity of the Cas9 nuclease. The ease of using such a platform to cleave specific sites in the genome simply by choosing a guide RNA sequence complementary to the target sequence has lead to an explosion in its use, with enormous amounts of interest and capital being contributed to the further development and application of this technology (Doudna and Charpentier \textit{et al.} 2014).
-
-In what is perhaps the most important paper in the field, the Doudna (UC Berkeley) and Charpentier (Umea University, Sweden) labs teamed up in 2012 to fully characterize the homing mechanism of the Cas9 nuclease. Through  \textit{in vitro} cleavage assays, they found that Cas9, the tracrRNA, the crRNA with a spacer specifying the correct target, and magnesium ions, are all that is needed for cleavage of target DNA to occur. They further validated that complementarity between the spacer and the target is necessary for cleavage, and that one or two mismatches in this spacer::target complementarity is tolerated. Additionally, they showed that cleavage of a target depends on a ``protospacer adjacent motif" (PAM) sequence, which is specified by the Cas9 protein, not the spacer (Jinek and Chylinski \textit{et al.} 2012).
-
-\begin{figure}[!h]
-	\begin{center}
-	\centerline{
-	\includegraphics[width=1.15\textwidth]{figures/grna.png}
-	}
-	\caption{An RNA complex guides Cas9 to its target. \textbf{(a)} The matured crRNA and tracrRNA complex to guide Cas9. \textbf{(b)} A single gRNA comprising of the crRNA, a linker loop, and a crRNA guides Cas9 with the same efficiency as the dual-guide system. (Adapted from Jinek and Chylinski \textit{et al.} 2012)}
-	\label{fig:grna}
-	\end{center}
-\end{figure}
-
-Finally, realizing that the CRISPR-Cas system could be an easily programmable nuclease, the authors constructed a synthetic platform that marked the first time that this system was engineered for easier biotechnological use. They fused the tracrRNA and crRNA sequences (as they would be after maturation by RNAseIII) together with a short linker loop and expressed the entire construct as a single sequence. This led to high cleavage activity, indicating that bypassing the maturation step increases the activity of CRISPR-Cas restriction. This fused RNA molecule concept, dubbed the guide RNA (gRNA) is now nearly universally used in all applications of the CRISPR-Cas platform.
-
-Perhaps one of the largest questions in the CRISPR-Cas9 field is that of targetability. Since there is a PAM sequence requirement for all known Cas9 proteins, each can only target a limited subset of all possible genomic targets. Interestingly, since the CRISPR-Cas system evolved as a bacterial immune system against viral DNA, and since different bacterial strains are attacked by vastly different phages, Cas9 proteins from different strains seem to have differing PAM specificities. Thus, the targeting range of the CRISPR-Cas platform can be expanded by adding more Cas9s to choose from (Kleinstiver \textit{et al.} 2015). We explore this further in chapter 5. Additionally, we explore the ability of Cas9 to distinguish between a match and a mismatch between the spacer and target at each position through a spacer randomization assay, which is described in chapter 6.
-
-Of similar import is specificity. Because RNA and DNA can form complementary complexes even in the presence of a small number of mismatches between the two molecules' sequences, CRISPR-Cas9 often cleaves at off-target locations in a somewhat unpredictable manner. This has huge implications in applications of CRISPR-Cas9, as off-target mutagenesis can possibly have catastrophic effects on a cell. We have recently described an assay for detecting off-target cleavage events by Cas9 in an unbiased manner, which can be used to better understand the specificities of different Cas9 proteins (Tsai \textit{et al.} 2015). We explore the preliminary results of the application of the GUIDE-seq assay in chapters 3 and 4.
-
-\include{chapters/background}
-
-\chapter{GUIDE-Seq: An unbiased assay for genome-wide off-target detection}
-\section{Exploratory Analysis of Potential Off-Target sites}
-\section{Overview of the GUIDE-Seq Assay for Production of Raw Read Data}
-\section{Bioinformatic Analysis of GUIDE-Seq data to infer off-target sites}
-\section{Comparison of GUIDE-Seq results to ChIP-Seq and Computationa}
-
-\chapter{\textit{guideseq}: A computational pipeline for analyzing GUIDE-Seq data}
-\section{Understanding the core steps of the \textit{guideseq} pipeline}
-\section{Example output of the software}
-
-\chapter{Expanding the Targeting Range of CRISPR-Cas with Orthogonality Profiling and Protein Engineering}
-\section{Engineering the PAM-contacting residues of Cas9}
-\section{Predicting the Activity of Orthogonal Cas9 Systems}
-\section{Understanding the PAM Depletion Assay}
-\section{PAM Depletion Assay Results}
-
-\chapter{Characterizing the Specificity of CRISPR-Cas Proteins}
-\section{Overview of the spacer subsequence randomization assay}
-\section{Specificity Results of Randomization Assay}
-
-\chapter{CasBLASTR: A tool for Genome Editing Experiment Design and Analysis}
-\section{Application Architecture}
-\section{Results and Usage Statistics}
-
-\chapter{Conclusion and Future Steps}
+\include{chapters/chapter1}
+\include{chapters/chapter2}
+\include{chapters/chapter3}
+\include{chapters/chapter4}
+\include{chapters/chapter5}
+\include{chapters/chapter6}
+\include{chapters/chapter7}
 
 %\include{chapters/introduction}
 %\include{chapters/chapter1}
@@ -93,7 +49,7 @@ Of similar import is specificity. Because RNA and DNA can form complementary com
 %
 % the back matter
 \clearpage
-\bibliography{VVT_Thesis_References}
+\bibliography{TSS_Thesis_References}
 \addcontentsline{toc}{chapter}{References}
 \bibliographystyle{apalike2}
 

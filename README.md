@@ -1,4 +1,4 @@
-# VVT Thesis
+# TSS Thesis
 
 My undergraduate thesis.
 

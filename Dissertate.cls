@@ -13,6 +13,29 @@
 \ProvidesClass{Dissertate}[2014/03/25 v2.0 Dissertate Class]
 \LoadClass[12pt, oneside, letterpaper]{book}
 
+% Added by TSS
+\RequirePackage{amsfonts}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{amsthm}
+\RequirePackage{tikz}
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem{property}{Property}
+\newtheorem{lemma}{Lemma}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem{corollary}{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem*{example*}{Example}
+\newtheorem{definition}{Definition}
+\newtheorem*{definition*}{Definition}
+
+
 % Text layout.
 \RequirePackage{amssymb}
 \RequirePackage{mathspec}
