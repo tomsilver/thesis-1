@@ -10,13 +10,57 @@ Don't get fooled by people who claim to have a solution to Artificial General In
 
 \subsection{Introduction}
 
-Research in artificial intelligence is driven by standardized tests and competitions. The level of success of an algorithm on a widely used test can determine the amount of funding and attention from academia that it receives. With such a burden placed on these tests, one would hope that they provide an accurate reflection of the extent to which an algorithm has achieved artificial intelligence. Unfortunately, existing tests fall far short of this mark \cite{shieber15}. At best, current contests evaluate the performance of specialized algorithms on restricted problem domains that are not guaranteed to generalize, such as object recognition \cite{lecun98, russakovsky15} or robot soccer \cite{anderson11, kitano97}. At worst, tests prematurely claim to be the ultimate arbiter of general intelligence \cite{loebner03}, inspiring a distracting and unwarranted media frenzy when they are passed \cite{anonymous14, shieber14}. In all cases, the current benchmarks for evaluating AI machines are leading the research community away from the creation of truly general intelligence.
+On March 12, 2016, just after 5 pm in Seoul, Lee Se-dol, the 18-time world champion of the board game Go, conceded defeat. His opponent had trounced him in three consecutive games, stunning him with unexpected moves and overwhelming him with a demonstrated mastery of the game's finest details. The man who placed the winning stones onto the Go board swiftly stepped aside to reveal the series' true victor: an Artificial Intelligence (AI) developed by Google DeepMind called AlphaGo. The outcome was heralded internationally as a revolutionary achievement for AI. ``AlphaGo's victory means the world is about to change,'' proclaimed \textit{The Next Web}\cite{1_nextweb_2016}. ``Artificial intelligence [has come] of age in showdown between human brainpower and a machine,'' \textit{the Guardian} similarly declared\cite{1_the_guardian_2016}. 
 
-In this thesis, I put forth a new system for evaluating general AI. The system invites humans and machines to participate in two-player games in which each player assesses the intelligence of her opponent. The aggregation of these assessments is used to assign a rating to the player. A player's rating is a reflection of the player's demonstrated intelligence. In this sense, the ratings that emerge from the system are the results of a never-ending test of each of the player's general AI. The definition of intelligence is not presupposed in this system; instead, it emerges from the collective judgement of all players. Thus the system is a microcosm of the natural process that humans use to evaluate each other's intelligences. I will argue that the system offers a bright light on the dim path towards machine intelligence.
+To long-time observers of AI research, these headlines likely look familiar. The sensation is similar to the coverage of Eugene Goostman's so-called passing of the Turing Test --- ``a milestone in artificial intelligence,'' said \textit{the Guardian}\cite{1_the_guardian_2014, occasional_pamphlet_2014} --- and the wave of hype surrounding Watson's victory in Jeopardy! --- ``a vindication for the academic field of artificial intelligence,'' reported \textit{The New York Times}\cite{1_newyorktimes_2011}. In these cases and others, after the dust settles, the significance of the achievement in the context of general AI research remains unclear. Expert views on the current state of AI could not be more varied or discordant. One representation of this disarray is the recent collection of essays on \textit{What to Think About Machines that Think}, in which over 200 leading thinkers disagree on the definition, timeline, and even theoretical possibility of AI \cite{edge2016what}. There is no shortage of speculation, nor any sign of consensus, on the emergence of truly intelligent machines.
+
+Day-to-day research in artificial intelligence proceeds unencumbered by these speculations. A model's worth is not measured by public perception, but rather, according to its performance on benchmarks of the field. Such benchmarks --- e.g. object recognition in ImageNet \cite{russakovsky2015imagenet}, language modeling in the 1 Billion Word Dataset \cite{chelba2013one}, reinforcement learning for various Atari Games\cite{mnih2013playing} --- are attractive for researchers who are seeking measurable, specific improvements on the state of a particular art. As guiding lights for research efforts, these benchmarks can have tremendous influence on AI. In the best case, they can provide cohesion and order to a burgeoning field. Unfortunately, they can also incentivize incremental progress on narrow problems and effectively discourage large leaps of innovation\cite{shieber2015}. Moreover, these benchmarks give researchers little insight as to a model's proximity to true AI. Apparent progress on a particular task --- object recognition, chess, Go, etc. --- may actually be negligible in the long arc of AI research.
+
+In this thesis, I present an original benchmark for true AI, arguably the first of its kind. The benchmark, which I call Luna\footnote{Luna is an tribute to Alan Turing; Luna Rating is an anagram of Alan Turing.}, takes inspiration from the network-based rating systems of chess and the natural language interrogations of the Turing Test. Luna invites humans and machines to participate in two-player games in which each player assesses the intelligence of the other. The aggregation of these assessments is used to assign a rating to the player. In this sense, the ratings that emerge from the system are the results of a never-ending test of each of the player's general AI. The definition of intelligence is not presupposed in this system; instead, it emerges from the collective judgement of all players. Thus the system is a microcosm of the natural process that humans use to evaluate each other's intelligences. I will argue that the system offers a bright guiding light on the dim path towards machine intelligence.
+
+\section{Existing Tests for AI}
+
+The history of testing AI is long but sparse. It begins in 1950 with the introduction of the Turing Test and meanders into the present day with a focus on specialized tasks. Only recently has there been interest in designing new tests that are more appropriate for practically evaluating general AI \cite{you2015beyond}. This interest often manifests as an appeal to move ``beyond the Turing Test'' \cite{1_the_newyorker_2015}. However, the Turing Test has never been a practical test for general AI. Thus the recent wave of interest is really a call for the first ever practical test for general AI.
+
+\subsection{The Turing Test}
+
+The first formal test for machine intelligence was articulated by Alan Turing, the father of computer science and one of the progenitors of AI \cite{turing1950computing}. Six decades later, the eponymous Turing Test remains at the center of the dialogue surrounding machine intelligence. The Test requires three rooms, each equipped with a telegraph. In one room, the machine candidate for AI is connected to the telegraph, ready to receive and transmit messages. The second room, which is disconnected from the first room, houses a human confederate. A human judge resides in the third room with telegraph connections to the first and second room. The duty of the judge is to determine which room contains the human. Different instantiations of the Test vary details beyond this framework, e.g. how long the conversations go on before a judgment is made \cite{loebner2003home, bishop2010testing}. In all cases, the machine is deemed intelligent if it is able to trick the human judge into guessing that it is human.
+
+Since its proposal, the Turing Test has weathered criticism from every conceivable angle. There are myriad philosophical objections, especially those of Block, Gunderson, and Searle, who argue that intelligence is by definition a capacity, and that the Test cannot prove the existence of capacity  \cite{block1980intuitions, gunderson1964vii, searle1980minds}. Shieber saves the Test from this line of critique using Interactive Proofs as a metaphor \cite{shieber2007turing}, but maintains that the Test should be viewed as a thought experiment, rather than a practical inducement for research \cite{shieber2015}. Hayes \& Ford agree with the impracticality of the Test \cite{hayes1995turing}. They go so far as to call the Test ``harmful'' for AI research, citing the lack of restrictions placed on judges, the emphasis on deception, and the binary result as fundamental failures of the Test. Indeed, attempts at practical instantiations of the Test (e.g. the Loebner Prize) have been met with strong criticism from the research community \cite{shieber1994lessons, occasional_pamphlet_2014}. The Test remains synonymous with AI in the public parlance, but researchers are increasingly looking ``beyond the Turing Test'' for more practical tests of AI \cite{1_the_newyorker_2015, you2015beyond}.
+
+\subsection{Robotics Contests}
+
+Robotics seems like a natural domain for testing artificial intelligence. The prospect of robots that are able to behave and reason at human levels is a clear motivation for AI research. Moreover, a candidate for AI is likely to be more convincing if it is physically instantiated. Anderson, Baltes, and Cheng (2011) review existing robotics contests and critique their utilities as benchmarks for AI research. These contests include annual competitions like AAAI/IJCAI, which consists of a diverse suite of tasks for the robots to perform \cite{balch2002ten}; RoboCup, which requires candidates to play an actual game of soccer, thus entering the realm of multi-agent strategizing \cite{kitano1997robocup}; and HuroCup, which might be considered an ``olympics for robots'', requiring contestants to compete in a wide range of sports and agility competitions \cite{baltes2009hurocup}. Anderson, Baltes, and Cheng find specific shortcomings in each of these competitions as proxies for AI, but suggest that more broad and versatile robotics competitions could still be useful for testing AI.
+
+I argue that a test for AI should be independent of robotics. One inherent problem with robotics as a medium to test AI is that there are a host of extremely challenging problems in the field that have little or nothing to do with intelligence (e.g. the difficult mechanical problems associated with walking). It may be that certain problems in robotics are sufficient to demonstrate AI, but those problems are often harder than AI itself. Another fundamental problem in robotics competitions that currently exist is that they consist of a fixed set of a tasks. Any fixed set of tasks is susceptible to be criticized by third parties as unrepresentative of AI. Moreover, a robot can be trained to accomplish this fixed set of tasks without possessing any unifying architecture for general AI. Thus, robotics should be seen not as a medium for testing AI, but rather as an application of AI once it has been reached. Too keen of a focus on robotics threatens to pull research away from the most direct path towards AI. 
+
+\subsection{Specialized Benchmarks}
+
+The overwhelming majority of testing in modern AI research is performed on specialized benchmarks. ImageNet, which requires contestants to recognize objects in a massive image dataset, is a well known example \cite{russakovsky2015imagenet}. Various Natural Language Processing problems, such as Part of Speech Tagging and Language Modeling, are often studied using the Penn Treebank dataset as a benchmark \cite{marcus1993building}. Mnih et al. establish a suite of Atari games as a benchmark for reinforcement learning \cite{mnih2013playing}. Several contests focus on AI game playing, such as chess \cite{hayes1976world}, poker \cite{littman20062006}, and general game playing \cite{genesereth2005general}. The Hutter Prize offers a benchmark for lossless text compression \cite{mahoney2006rationale}. None of these competitions claim to test general AI. The search for a practical test for AI continues. 
+
+\section{A Pragmatic Sufficiency for Intelligence}
+
+Given the substantial and sustained research attention that AI has enjoyed, the lack of a unified practical benchmark may be rather surprising. This absence can be partly explained by the lack of consensus surrounding the definition of intelligence. Psychology and AI suggest several definitions of the term. Legg and Hutter collect 70 distinct definitions from both fields, admitting that even this list is incomplete \cite{legg2007collection}. To further complicate matters, intelligence is also entangled with other philosophical quandaries, such as the nature of consciousness. The Turing Test sidesteps the definition problem by suggesting a sufficient condition without claiming that the condition is also necessary; passing the Test is enough to demonstrate intelligence, but failing does not prove its absence. However, as alluded to above, even this sufficient condition is vulnerable to philosophical criticism. It seems as though any proposed definition or sufficiency for intelligence will invariably be contested.
+
+In search of a path around this philosophical obstacle, I begin with a tautological observation: a machine would be called intelligent if everyone called it intelligent. If the machine simply generated random sequences of letters and was able to ``feign intelligence'' by random luck, it would still be called intelligent. (In the same way, a human randomly guessing on an IQ test could be deemed intelligent by chance, or a non-Italian speaker visiting Italy could feign fluency by randomly blurting out syllables and getting lucky.) Such a randomly lucky machine would be evidence of weak AI, but not of strong AI, to use the terminology of Searle; weak AI requires only the apparent simulation of a mind, while strong AI insists that a machine \textit{is} a mind \cite{searle1980minds}. For the purpose of developing a practical test, measuring weak AI suffices. Russell and Norvig, authors of the most widely cited textbook on AI, confirm this view, remarking that ``most AI researchers take the weak AI hypothesis for granted, and don't care about the strong AI hypothesis'' \cite{russell1995modern}. If a machine is able to convincingly demonstrate intelligence to everyone in the world, surely that would be sufficient to call it weak AI.
+
+Of course, the requirement that everyone weigh in on the intelligence status of a machine is impractical and overly strict. At the same time, a benchmark relying on human judgements must be sufficiently standardized so that subjective variations do not prevent meaningful comparisons between test instances. And yet standardization threatens to impose an implicit definition of intelligence. To resolve this paradox, I take inspiration from the rating systems of chess \cite{glickman1995chess}. The rating assigned to a chess player is meant to reflect that player's ability relative to all other rated players. These ratings are not assigned based on complete tournaments in which every player challenges every other player; rather, the ratings are awarded based on the individual outcomes of two-player games. Each game is seen as a sample of the player's ability, and ratings are updated after each game to take into account this new sample. Thus the ratings are constantly moving towards true representations of the relative abilities of all players. Chess rating systems are able to assign a rating to a player that reflects the consensus of all players in the system, without relying on every player for every rating.
+
+With chess rating systems and the Turing Test in mind, I propose the following pragmatic sufficiency for AI: \textbf{if human consensus deems the verbal responses of a machine to be evident of intelligence comparable with that of most other humans, then the machine is intelligent.}  Of course, this sufficiency as stated leaves many questions unanswered. How many humans must directly provide input in order to capture consensus? What precisely is meant by ``comparable'' and ``most''? These are questions that may be addressed philosophically or empirically. But for the purpose of developing a benchmark, it suffices to measure relative progress: if human consensus deems the verbal responses of one machine to be more evident of intelligence than those of another machine, then the former is closer to achieving AI. Similarly, as the number of humans providing direct inputs increases, accuracy increases, as the collective judgement will converge towards the consensus. This pragmatic sufficiency for intelligence forms the foundation of the Luna Rating System, my proposed benchmark for AI.
+
+\section{The Luna Rating System}
+
+\subsection{The Luna Rating System}
+
+The Luna Rating System (LRS) is a never-ending tournament of a two-player game called the Luna Game. The details of the Luna Game are covered in Chapter 2. For the purpose of introducing LRS, it suffices to say that a Luna Game requires each of the two players to guess the intelligence, or Smarts Rating, of the other player. The winner of the game is the player whose guess is closest to the actual rating. At the end of a Luna Game, a player's Smarts Rating is updated based on the opponent's guess. Players are encouraged to maximize their own Smarts Ratings and their number of game wins. They are therefore incentivized to demonstrate maximal intelligence and to judge the intelligence of other players with maximal accuracy. The symmetry of the Luna Game is intentional: every player in LRS is constantly a judge of intelligence and a candidate under evaluation by other players.
+
+In benchmarking AI, the central quantity of interest in LRS is a player's Smarts Rating. This number encapsulates the human consensus of the intelligence of that player. If a machine achieves a Smarts Rating that is on par with the Smarts Ratings of humans, after a sufficient number of Luna Games, it will have passed the implicit intelligence test of LRS and convincingly demonstrated general AI. Moreover, the effect of changes made to the machine may be measured according to the subsequent difference in Smarts Rating. The Smarts Rating is the number that should be reported in characterizing the success of a candidate for AI.
+
+One immediate advantage of LRS is its strong incentive for judges to perform their duties well. No other testing system for AI with human judges has a built-in impetus for high quality judging. Moreover, as the details of the Luna Game make clear, judges are not perversely motivated to attempt to fool candidates for AI by putting forth excessively difficult tests; instead, they are rewarded for giving judgments that are close to the consensus of all players in the system. Another critical advantage of LRS is the continuity of Smarts Ratings. As opposed to binary systems like the Turing Test, progress, however small, is observable. This property distinguishes LRS as an informative benchmark, rather than a theoretical test. An additional feature of LRS is its accessibility. The system is meant to be freely and constantly available to researchers, e.g. through the World Wide Web. These characteristics and others significantly differentiate LRS from existing tests for AI. Moreover, as I argue in the following section, LRS is unique in satisfying all of the fundamental principles of a practical test for intelligence.
 
 \subsection{Principles of a Practical Test for Intelligence}
 
-The system proposed in this thesis is meant to steer AI research towards the creation of general intelligence. Therefore, the system must actually be used; a thought experiment will not suffice. Here I present five principles that must be obliged if the test for intelligence is to fulfill its stated purpose.
+LRS is meant to steer AI research towards the creation of general intelligence. Therefore, the system must actually be used; a thought experiment will not suffice. Here I propose five principles that must be obliged if the test for intelligence is to fulfill its stated purpose.
 
 \subsubsection{Accessibility}
 To serve as a useful guide, the test for AI must be constantly accessible to researchers. Ideally the test should be efficient enough that it may be used several times throughout the course of an AI developer's day. This principle discourages a centralized competition that is only held at regular intervals, and instead favors a rating system that can be accessed through the Internet and then carried out using the resources of an average computer.
@@ -33,142 +77,51 @@ A fair test should not rely on any one person's interpretation of intelligence. 
 \subsubsection{Immunity to Gaming}
 It should not be possible for a researcher to ``game the system'' and achieve outsized results by exploiting structure in the test. This principle precludes any sort of hard-coding of knowledge that is \textit{a priori} known to be important for the test. For example, a standardized test fails the Immunity to Gaming principle, since any researcher who observes the results of the test once would be able to submit a machine with the memorized knowledge necessary to pass the test. 
 
-\section{Existing Contests for Artificial Intelligence}
-
-The history of testing AI is long but sparse. It begins in 1950 with the introduction of the Turing Test and meanders into the present day with specialized tests like ImageNet and Robocup. Only recently has there been interest in designing new tests that are more appropriate for practically evaluating general AI \cite{you15}. This interest often manifests as an appeal to move ``beyond the Turing Test'' \cite{marcus14}. However, as I argue below, the Turing Test has never been a practical test for general AI, nor was it ever meant to be. Thus the recent wave of interest is really a call for the first ever practical test for general AI.
-
-\subsection{The Turing Test}
-
-The first formal test for machine intelligence was articulated by Alan Turing, the father of computer science and one of the progenitors of AI \cite{turing50}. Six decades later, the eponymous Turing Test remains at the center of the dialogue surrounding machine intelligence. The Test requires three rooms, each equipped with a telegraph. In one room, the machine candidate for AI is connected to the telegraph, ready to receive and transmit messages. The second room, which is disconnected from the first room, houses a human confederate. A human judge resides in the third room with telegraph connections to the first and second room. The duty of the judge is to determine which room contains the human. Different instantiations of the Test vary details beyond this framework, e.g. how long the conversations go on before a judgment is made \cite{loebner03}. In all cases, the machine is deemed intelligent if it is able to trick the human judge into guessing that it is human.
-
-In applying the principles of a test for intelligence outlined in 1.2, the limitations of the Turing Test come to the fore. The Test is not accessible in practical terms, since it relies on two humans, a judge and a confederate, per machine per test. The Test is generalizable insofar as natural language is AI-complete. The Test is not continuous; it outputs a ``pass'' or ``fail'' depending on whether the participant is able to fool the judge. The Test is very dependent on persons, in particular the human judge and confederate, and does not incorporate any popular conception of intelligence. Finally, the Test is immune to gaming, since it is not possible to anticipate the behavior of the human judge. Thus the Turing Test satisfies only two of the five prescribed principles for a practical test of intelligence.  This analysis is summarized in Table 1. The Test has withstood the test of time for good reason. Its main insight ---  that intelligence cannot be evaluated without an intelligent evaluator --- must be realized by any test designer. Nonetheless, as several have argued \cite{hayes95, moor01, shieber15}, the Turing Test should be viewed as a thought experiment rather than a practical test for intelligence. 
-
-\subsection{Robotics Contests}
-
-Robotics seems like a natural domain for testing artificial intelligence. The prospect of robots that are able to behave and reason at human levels is a clear motivation for AI research. Moreover, a candidate for AI is likely to be more convincing if it is physically instantiated. Anderson, Baltes, and Cheng (2011) review existing robotics contests and critique their utilities as benchmarks for AI research. These contests include annual competitions like AAAI/IJCAI, which consists of a diverse suite of tasks for the robots to perform \cite{balch02}; RoboCup, which requires candidates to play an actual game of soccer, thus entering the realm of multi-agent strategizing \cite{kitano97}; and HuroCup, which might be considered an ``olympics for robots'', requiring contestants to compete in a wide range of sports and agility competitions \cite{baltes08}. Anderson, Baltes, and Cheng find specific shortcomings in each of these competitions as proxies for AI, but suggest that more broad and versatile robotics competitions could still be useful for testing AI.
-
-I argue that a test for AI should be independent of robotics. One inherent problem with robotics as a medium to test AI is that there are a host of extremely challenging problems in the field that have little or nothing to do with intelligence (e.g. the difficult mechanical problems associated with walking \cite{todd13}). It may be that certain problems in robotics are sufficient to demonstrate AI, but those problems are often harder than AI itself. Another fundamental problem in robotics competitions that currently exist is that they consist of a fixed set of a tasks. Even if these tasks are broad, this dependency is a violation of two of my principles for a practical test for AI: Dependent on People/Independent of Persons, and Immunity to Gaming. Any fixed set of tasks is susceptible to be criticized by third parties as unrepresentative of AI. Moreover, a robot can be trained to accomplish this fixed set of tasks without possessing any unifying architecture for general AI. Thus, robotics should be seen not as a medium for testing AI, but rather as an application of AI once it has been reached. Too keen of a focus on robotics threatens to pull research away from the most direct path towards AI. 
-
-\subsection{Other AI Competitions}
-
-There are several other existing competitions and prizes for artificial intelligence. Some of these take the form of general awards for career achievement, such as the annual David E. Rumelhart prize \cite{rumelhart} and the IJCAI Award for Research Excellence \cite{ijcai}. These awards serve to encourage research in AI, but do not claim to test AI nor directly steer the field towards it. Other contests focus on specialized tasks. ImageNet requires contestants to recognize objects in a massive image dataset \cite{russakovsky15}. The Hutter Prize offers a benchmark for lossless text compression \cite{mahoney09}. Several contests focus on AI game playing, such as chess \cite{hayes76}, poker \cite{littman06}, and general game playing \cite{genesereth05}. Few of these competitions claim to test general AI, and none are successful in satisfying all five principles of a practical test for AI (see Table 1). The search for a practical test for AI continues. 
-
-\section{The Luna Rating System}
-
-\subsection{Intelligence as a Social Construct}
-
-Psychology and artificial intelligence offer several competing definitions of intelligence. Legg and Hutter collect 70 distinct definitions from both fields, admitting that even this list is incomplete \cite{legg07}. A unifying definition would be highly convenient for the purpose of designing a test. Alas, any one definition is revealed to be incomplete or flawed as soon as it is written down. Why is a definition for intelligence, a property with obvious societal importance, so elusive? I argue that intelligence is not an immutable property found in nature, but rather a social construct that depends completely on the society that constructs it. If humans did not exist, intelligence would not exist. 
-
-Given this premise, it is clear that any test for artificial intelligence that does not receive direct input from human judges will be inherently flawed. A true test must capture the socially constructed definition of intelligence. In an ideal scenario, a machine would be evaluated by virtually every member of society using whatever methods of evaluation  each individual finds appropriate. A practical test must work to the same end under realistic constraints. Here I introduce the Luna Rating System as such a practical test and propose that it is an authentic reflection of the socially constructed notion of intelligence.
-
-\subsection{The Luna Rating System}
-
-The Luna Rating System (LRS) is a never-ending tournament of a two-player game called the Luna Game. Players of the Luna Game may be human or machine. All players have two consistent goals: to accurately evaluate the intelligence of their opponents, and to prove their own intelligence. Players are driven to demonstrate intelligence because they want to achieve a high \textit{Smarts Rating}. The Smarts Rating is the central quantity of interest for the purpose of identifying artificial intelligence. If a machine achieves a Smarts Rating that is on par with the Smarts Ratings of humans, it will have passed the implicit intelligence test of LRS and convincingly demonstrated general AI.
-
-The details of the Luna Game are covered in Chapter 2. For the purpose of introducing LRS, it suffices to assume that a Luna Game requires each of the two players to evaluate the other's intelligence. A player's Smarts Rating is a reflection of the extent to which that player has convinced her past Luna Game opponents that she is intelligent. At the end of a Luna Game, a player's Smarts Rating is updated based on the evaluation of the opponent via Kalman filtering \cite{julier97}. Thus every player in LRS is constantly a judge of intelligence and a candidate under evaluation by other players.
-
-One immediate advantage of LRS is its strong incentive for judges to perform their duties well. No other testing system for AI with human judges has a built-in impetus for high quality judging. Moreover, as the details of the Luna Game make clear, judges are not perversely motivated to attempt to fool candidates for AI by putting forth excessively difficult tests; instead, they are rewarded for giving judgments that are close to the consensus of all players in the system, and therefore close to the socially constructed definition of intelligence. 
-
 \subsection{Analysis of Principles}
 
-LRS is the only practical test for intelligence to satisfy all five of the principles outlined in 1.2. The system exists online and invites humans and machines to play for free. Thus LRS is maximally accessible. Like the Turing Test, the Luna Game involves open-domain question answering, and therefore is AI-complete, i.e. generalizable to all problems in AI. Smarts Ratings are continuous quantities that are updated after every Luna Game, making progress immediately clear to all players. These ratings reflect the equilibrium consensus of all players in LRS on what it means to be intelligence, and is not biased towards any single player's notion. Finally, the system is immune to gaming, since all players are encouraged to devise their own original questions, which cannot be predicted by the other player. Table 1 summarizes how the satisfaction of these five principals represents a substantial improvement over existing tests for AI.
+LRS is the only practical test for intelligence to satisfy all five of the principles outlined above. The system exists online and invites humans and machines to play for free. Thus LRS is maximally accessible. Like the Turing Test, the Luna Game involves open-domain question answering, and therefore is AI-complete, i.e. generalizable to all problems in AI. Smarts Ratings are continuous quantities that are updated after every Luna Game, making progress immediately clear to all players. These ratings reflect the equilibrium consensus of all players in LRS on what it means to be intelligence, and is not biased towards any single player's notion. Finally, the system is immune to gaming, since all players are encouraged to devise their own original questions, which cannot be predicted by the other player. Table \ref{principles} summarizes how the satisfaction of these five principals represents a substantial improvement over existing tests for AI.
 
 \begin{table}[h!]
 \centering
-\label{my-label}
 \begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
 \textbf{Principle}                                                                              & \textbf{Turing} & \textbf{ImageNet} & \textbf{HuroCup} & \textbf{Hutter} & \textbf{Games} & \textbf{LRS} \\ \hline
-Accessibility                                                                          &        & X        &         & X      & X     & X   \\ \hline
-Generalizibility                                                                       & X      &          & X       &        &       & X   \\ \hline
-Continuity                                                                             &        & X        & X       & X      & X     & X   \\ \hline
-\begin{tabular}[c]{@{}l@{}}Dependent on People, \\ Independent of Persons\end{tabular} &        &          &         &        &       & X   \\ \hline
-Immunity to Gaming                                                                     & X      &          &         &        & X     & X   \\ \hline
+Accessibility                                                                          &        & \checkmark        &         & \checkmark      & \checkmark     & \checkmark   \\ \hline
+Generalizibility                                                                       & \checkmark      &          & \checkmark       &        &       & \checkmark   \\ \hline
+Continuity                                                                             &        & \checkmark        & \checkmark       & \checkmark      & \checkmark     & \checkmark   \\ \hline
+\begin{tabular}[c]{@{}l@{}}Dependent on People, \\ Independent of Persons\end{tabular} &        &          &         &        &       & \checkmark   \\ \hline
+Immunity to Gaming                                                                     & \checkmark      &          &         &        & \checkmark     & \checkmark   \\ \hline
 \end{tabular}
-\caption{\textbf{The Luna Rating System is the only test that satisfies all five principles for a practical test of intelligence.} Other existing tests include the Turing Test, which invokes natural language; ImageNet, which focuses on object recognition in computer vision; HuroCup, a sports-based competition in robotics; the Hutter Prize, which deals with text compression; and several games, such as chess, poker, and general game playing.}
+\caption{\label{principles}\textbf{The Luna Rating System is the only test that satisfies all five principles for a practical test of intelligence.} Other existing tests include the Turing Test, which invokes natural language; ImageNet, which focuses on object recognition in computer vision; HuroCup, a sports-based competition in robotics; the Hutter Prize, which deals with text compression; and several games, such as chess, poker, and general game playing.}
 \end{table}
 
-\subsection{Thesis Outline}
+\subsection{Contrary Views on the Main Question}
 
-The primary contribution of this thesis is the introduction of the Luna Rating System as a practical test for machine intelligence. The remainder of the thesis is divided into three parts. In the next chapter, I continue the introduction of the Luna Rating System through a description of the Luna Game. This chapter is followed by a study of the robustness of LRS, characterizing likely strategies for game play and analyzing their effect on the accuracy of Smarts Ratings as a proxy for intelligence. In Part II, I enter LRS as a machine player. The Luna Game is broken down into three separate problems in natural language processing and machine learning. Each is given theoretical treatment and several novel solutions are proposed, many of which generalize beyond the scope of LRS. Finally, in Part III, I create the first online instantiation of LRS and invite humans and machines to play. Their games illuminate the current state of AI and provide a rich natural language dataset for further analysis.
+In Turing's seminal paper introducing his Test, he includes a section titled ``Contrary Views on the Main Question,'' in which he enumerates and responds to anticipated objections \cite{turing1950computing}. Here I follow his lead, briefly considering possible objections to the Luna Rating System.
 
-%\pagebreak
-%\bibliographystyle{abbrvnat}
-%
-%\begin{thebibliography}{}
-%
-%\bibitem{anderson11}
-%Anderson, John, Jacky Baltes, and Chi Tai Cheng. ``Robotics competitions as benchmarks for AI research.'' The Knowledge Engineering Review 26.01 (2011): 11-17.
-%
-%\bibitem{anonymous14}
-%Anonymous. ``Computer Simulating 13-year-old Boy Becomes First to Pass Turing Test.'' Http://www.theguardian.com/. The Guardian, 9 June 2014. Web.
-%
-%\bibitem{balch02}
-%Balch, T. \& Yanco, H. 2002. ``Ten years of the AAAI mobile robot competition and exhibition.'' AI Magazine 23(1), 13?22.
-%
-%\bibitem{baltes08}
-%Baltes, Jacky, and Thomas Braunl. ``HUROCUP: General Laws of the Game 2008.'' (2009).
-%
-%\bibitem{genesereth05}
-%Genesereth, Michael, Nathaniel Love, and Barney Pell. ``General game playing: Overview of the AAAI competition.'' AI magazine 26.2 (2005): 62.
-%
-%\bibitem{hayes76}
-%Hayes, Jean E., and David NL Levy. The world computer chess championship, Stockholm 1974. Edinburgh University Press, 1976.
-%
-%\bibitem{hayes95}
-%Hayes, Patrick, and Kenneth Ford. ``Turing test considered harmful.'' IJCAI (1). 1995.
-%
-%\bibitem{ijcai}
-%``IJCAI Award for Research Excellence.'' International Joint Conferences on Artificial Intelligence. N.p., n.d. Web. 12 Dec. 2015.
-%
-%\bibitem{julier97}
-%Julier, Simon J., and Jeffrey K. Uhlmann. ``New extension of the Kalman filter to nonlinear systems.'' AeroSense'97. International Society for Optics and Photonics, 1997.
-%
-%\bibitem{kitano97}
-%Kitano, Hiroaki, et al. "Robocup: The robot world cup initiative." Proceedings of the first international conference on Autonomous agents. ACM, 1997.
-%
-%\bibitem{lecun98}
-%LeCun, Yann, Corinna Cortes, and Christopher JC Burges. ``The MNIST database of handwritten digits.'' (1998).
-%
-%\bibitem{legg07}
-%Legg, Shane, and Marcus Hutter. ``A collection of definitions of intelligence.'' Frontiers in Artificial Intelligence and applications 157 (2007): 17.
-%
-%\bibitem{littman06}
-%Littman, Michael, and Martin Zinkevich. ``The 2006 AAAI computer poker competition.'' ICGA Journal 29.3 (2006): 166.
-%
-%\bibitem{loebner03}
-%Loebner, Hugh. ``Home page of the Loebner prize-the first Turing test.'' Online unter http://www. loebner. net/Prizef/loebner-prize. html (2003).
-%
-%\bibitem{mahoney09}
-%Mahoney, Matt. ``Rationale for a Large Text Compression Benchmark.'' Rationale for a Large Text Compression Benchmark. N.p., 23 July 2009. Web. 12 Dec. 2015.
-%
-%\bibitem{marcus14}
-%Marcus, Gary. ``What Comes After the Turing Test?'' The New Yorker. The New Yorker, 09 June 2014. Web. 12 Dec. 2015.
-%
-%\bibitem{moor01}
-%Moor, James H. ``The status and future of the Turing test.'' Minds and Machines 11.1 (2001): 77-93.
-%
-%\bibitem{rumelhart}
-%``For Contributions to the Theoretical Foundations of Human Cognition.'' The David E Rumelhart Prize RSS. N.p., n.d. Web. 12 Dec. 2015.
-%
-%\bibitem{russakovsky15} 
-%Olga Russakovsky*, Jia Deng*, Hao Su, Jonathan Krause, Sanjeev Satheesh, Sean Ma, Zhiheng Huang, Andrej Karpathy, Aditya Khosla, Michael Bernstein, Alexander C. Berg and Li Fei-Fei. (* = equal contribution) ImageNet Large Scale Visual Recognition Challenge. IJCV, 2015.
-%
-%\bibitem{shieber14}
-%Shieber, Stuart M. No, the Turing Test has not been passed. In The Occasional Pamphlet. 10 June 2014a. URL http://blogs.law.harvard.edu/pamphlet/2014/06/ 10/no-the-turing-test-has-not-been-passed/.
-%
-%\bibitem{shieber15}
-%Shieber, Stuart M. ``Principles for Designing an AI Competition, or Why the Turing Test Fails as an Inducement Prize'' Forthcoming. (2015).
-%
-%\bibitem{todd13}
-%Todd, David J. Walking machines: an introduction to legged robots. Springer Science \& Business Media, 2013.
-%
-%\bibitem{turing50}
-%Turing, Alan M. ``Computing machinery and intelligence.'' Mind (1950): 433-460.
-%
-%\bibitem{you15}
-%You, Jia. ``Beyond the Turing Test.'' Science 347.6218 (2015): 116-116.
-%
-%%\end{thebibliography}
-%
-%\end{document}
+\subsubsection{Test Time Objection}
+
+Given the reliance on human input, some may object that the time required to obtain meaningful results from LRS is too long. In practice, with a sufficient number of active participants, it should be possible to solicit tens of judgements per day. This timescale is actually far shorter than possible alternatives, especially when those alternatives require humans convening and thus may only occur once every several months or years. Even specialized tasks that do not require any human input can take several hours to return results. Of course, the test time may dramatically increase if human participation is lacking; this condition is addressed in the following objection.
+
+\subsubsection{System Maintenance Objection}
+
+Some may object that a system requiring such broad and consistent human participation is simply too expensive to maintain. In the case that the system is web-based, the standard technical difficulties associated with hosting a website must be addressed. Furthermore, participants must be recruited and persuaded to play. In Chapter 6, I present a proof-of-concept to address this objection, demonstrating that a web-based implementation of LRS can be launched and sustained with relatively limited cost. The success of this simple system suggests that a system with more explicit incentives, e.g. paying participants to play, would have no trouble sustaining the required levels of activity.
+
+\subsubsection{Barrier to Entry Objection}
+
+After reviewing the details of the Luna Game (presented in Chapter 2), some may object that the entry into LRS requires too much additional work on the part of AI researchers. I respond to this objection in Chapter 4 with a review of the extensive body of work on two longstanding AI problems: Question Generation and Question Answering. I demonstrate that entry into LRS requires negligible effort beyond addressing these two problems. Moreover, an approach to the relatively lesser known problem of Question Generation is actually optional; researchers may manually select a fixed set of questions without affecting the integrity of the test. Question Answering is an extremely active research area and LRS invites direct application of these efforts.
+
+\subsubsection{Definition Drift Objection}
+
+Some may object that Smarts Ratings might drift towards a specific notion that may or may not be related to intelligence. This could occur if players were primed with the suggestion to ask mathematical questions or trivia questions, for example. To prevent this drift, I insist that LRS provides minimal instructions to players as to what is meant by ``intelligence''. Beyond this lack of bias, the integrity of Smarts Ratings is contingent upon the assumption that players will behave according to their own intuitive notions of intelligence. The results presented in Chapter 6 corroborate the reasonableness of this assumption. Additional anecdotal evidence suggests that players enjoy the challenge of creating probing and diverse questions in the course of the game.
+
+\subsection{Single Dimension Objection}
+
+While Smarts Ratings are more expressive than binary outputs, some may object that a single dimension is insufficient to meaningfully capture intelligence. For example, the theory of multiple intelligences from psychology posits that intelligence is best described along eight or more axes\cite{gardner2011frames}. The proposed existence of the $g$ factor, a variable that has been shown to correlate with most other modules of intelligence, is one possible response to this objection \cite{visser2006g}. More generally, the conception of intelligence as a real value in a single dimension is motivated by the same practicality that underpins much of LRS; such a metric is the simplest way to capture progress or regress in the pursuit of AI.
+
+\subsubsection{Malicious Strategizing Objection}
+
+With a particular weariness of anonymous online players, some may object that malicious strategizing could threaten the integrity of the test. Indeed, if all players decide to behave randomly, the results output by LRS will not be meaningful. As discussed in Chapter 3, LRS does not rely on the honest intentions of all players, nor does it assume that players will always play to the best of their abilities. The one necessary assumption is that the majority of players will ``guess honestly''. The meaning of this requirement is revealed in Chapter 2, and the extent to which the system is vulnerable to malicious guessing is rigorously analyzed in Chapter 3.
+
+\section{Thesis Outline}
+The primary contribution of this thesis is the introduction of the Luna Rating System as a practical benchmark for machine intelligence. The remainder of the thesis is roughly divided into three parts. In the next chapter, I continue the introduction of LRS with a description of the Luna Game. This chapter is followed by a study of the robustness of LRS, characterizing likely strategies for game play and analyzing their effect on the accuracy of Smarts Ratings as a proxy for intelligence. In Part II, I characterize the three subproblems that constitute the full Luna Game. The first two problems --- Question Generation and Question Answering --- have been extensively studied in previous work, which I review in Chapter 4. The third subproblem, which I deem the Luna Rating Prediction Problem, has not been previously characterized. In Chapter 5, I formalize the problem, argue its merit as a general problem of interest, and present baseline results. Finally, in Part III, I create the first online instantiation of LRS and invite humans and machines to play. Their games illuminate the current state of AI and offer rich insight into the human conception of intelligence.

@@ -1,169 +1,246 @@
 \begin{savequote}[75mm]
-Searle may only be behaving \textit{as if} he were thinking deeply about these matters. But, even though I disagree with him, his simulation is pretty good, so I'm willing to credit him with real thought.\qauthor{Nils Nilsson}
+I rarely find it useful to distinguish between theory and practice; their interplay is already profound and will only increase as the systems and problems we consider grow more complex.
+\qauthor{Michael I. Jordan}
 \end{savequote}
 
-\chapter{Luna Rating Prediction}
+\chapter{A Web Implementation of the Luna Rating System}
 
 \section{Introduction}
-\subsection{The Luna Rating Prediction Problem}
-In this chapter, I consider Luna Rating Prediction (LRP): the problem of predicting a respondent's  Smarts Rating from their Responses to a fixed set of questions. I submit that LRP is not only critical for an AI player of the Luna Game, but also interesting more broadly as a machine learning question that has not been previously examined. Thus I treat the problem generally and offer several avenues for approaching the problem in practice.
 
-\subsubsection{Definitions and Notation}
-Let $P$ be the set of all players in the LRS. Let $SR \subseteq \mathbb{R}^+$ be the domain of Smarts Ratings. Recall that $S : P \to SR$ gives the Smarts Rating of a player. I use $\Sigma^*$ to denote the set of all possible alphanumeric strings.
+The Luna Rating System is designed to be a practical test for machine intelligence. It may offer some utility as a thought experiment, but its primary value can only be realized in practice. In this chapter, I describe the design and launch of the first web-based implementation of LRS. The application is meant to serve as a comprehensive proof-of-concept. For the application to fulfill its purpose, it must first be capable of recruiting and handling hundreds of human players. The design should then persuade players to play several games, so as to refine their Smarts Ratings. Finally, the behavior of players should indicate a collective understanding of the Luna Game, and evidence should suggest their aspirations towards honest play.
 
-\theoremstyle{definition}
-\begin{definition}{Response Function}\\
-Each player $p \in P$ is equipped with a Response Function $r_p : \Sigma^* \to \Sigma^*$ that gives the player's Response to any prompt.
-\end{definition}
+The baseline success of the LRS implementation can be easily measured through traffic statistics: how many players play, and how long do they typically stay? Such statistics comprise the first section of results in this chapter. In addition to these standard metrics, the questions and responses traded by the players can be assessed qualitatively. I provide a representative sample of questions and discuss common themes from the full dataset. The final source of results is derived from human players' interactions with simple standardized machine players. I argue that the Guesses that human players make of the machine players should converge over time as a consensus on the semantics of Smarts Ratings is reached. The introduction of machine players also provides a demonstration for AI researchers who wish to introduce their own machines into the system.
 
-\theoremstyle{definition}
-\begin{definition}{Questions}\\
-Each player $p \in P$ is also equipped with a fixed finite set of prompts or questions, written $Q_p \subset \Sigma^*$. These questions are used by the player during the Interview Phase. 
-\end{definition}
+\section{Building the Web Interface}
 
-\noindent For a finite set of questions $Q \subset \Sigma^*$, let $\mathcal{R}_{Q} = \{ r_p(Q) | p \in \mathcal{P} \}$ be all possible Responses.
+\subsection{Design of the Web Interface}
 
-\theoremstyle{definition}
-\begin{definition}{Guess Function}\\
-A Guess Function, written as $g : \mathcal{R}_{Q} \to SR$, gives a player's Guess of an opponent's Smarts Rating based on the opponent's Responses to a set of questions $Q$.
-\end{definition}
+My implementation of the Luna Rating System is built on the open-source software stack consisting of MongoDB, Express.js, Angular.js, and Node.js, which is collectively referred to as the MEAN stack\cite{karpov2013mean}. The latter three technologies are all written in JavaScript and MongoDB is a NoSQL database. At a very high level, MongoDB stores all player and game data, Angular.js controls and displays the client side, Express.js forms the foundation of the server side, and Node.js runs the code written on top of that foundation. Notable libraries used include Mongoose.js, a Node.js library for interfacing with MongoDB; Passport.js, a Node.js library which provides middleware for user authentication; and Angular-UI, an Angular.js library that simplifies routing, i.e. navigation between different states of the website. The front end of the website, i.e. the style, formatting, and organization of content, was modified from the ``Material Admin'' LESS/Angular.js template, for which I purchased a single application license. The site was developed locally and then hosted on EC2 by Amazon Web Services under the domain name ``luna-game.com''.
 
+The skeletal framework of the website was first paper-prototyped and then iterated upon\cite{rettig1994prototyping}. The centerpiece of the website is the ongoing Luna Games, and a secondary component allows users to review their performance in previous Games. A single Luna Game seamlessly transitions from one phase to the next, while retaining cohesion as a whole Game. All opportunities for latency --- between phases of a Game or between Games ---  are reduced as much as possible to encourage repeated play. To increase the probability that a first-time user explores the website beyond the landing page, the website has an option to play as a ``guest.'' The only functional difference between a user that signs up and a guest is that signed up users may log out and log back in, while a guest account expires once the 60-day token is removed from the browser or the user explicitly signs out. User experience was further considered in the context of the results presented in Chapter 3 of this thesis, which demonstrate that all players must have a clear understanding of their goals during a Luna Game. While users should be able to start playing Luna Games as quickly as possible, they should first be fully aware of the Game's structure and their goals.
 
-\subsubsection{The LRP Problem}
-\textbf{The LRP Problem:} Let $Q \subset \Sigma^*$ be a finite set of questions. Learn a Guess Function $g$ that minimizes expected error $\mathrm{E}_{p \in P}[|g(r_p(Q))-S(p)|]$. \\
-LRP avoids some of the difficulties of natural language understanding, but also introduces a host of new challenges. For example, it is theoretically possible to achieve very good results on LRP without a complete understanding of the natural language responses being analyzed. On the other hand, a complete understanding of the responses is not sufficient to solve LRP, since ratings must still be predicted. Machines may excel at mapping representations of responses to ratings, while humans may excel at representing the responses. A winner of the Luna Game must excel at both tasks.
+Weighing these considerations, the core features of the website are divided into 10 primary states and 4 secondary states. The secondary states include static pages --- the contact page and two extended information pages --- and one profile page that allows a user to review statistics related to her historical performance. The primary states are presented in Figure \ref{statediagram}. They include four states corresponding to the phases of a Luna game, one home state, which contains games as nested states, a landing page, a guest state, a sign up state, a login state, and an information state. Note that first-time users must provide consent and review information about the structure of Luna Games before they are able to play. The eager first-time user is able to reach a new game with only three clicks from the home page, and a returning user can reach games with two clicks and a form submission. This simple state architecture ensures that users are informed and playing as soon as possible. Screenshots of a typical user experience are depicted in Figure \ref{screenshotpic}.
 
-
-\subsection{Related Work}
-LRP can be viewed as a relaxed version of a problem that has been previously considered: Automatic Short Answer Grading (ASAG) \cite{burrows15, pulman05, sukkarieh09, zia12}. Motivated by standardized testing, ASAG attempts to grade student responses to a fixed set of questions. While LRP is concerned only with the cumulative rating of all responses for a particular respondent, ASAG requires scores for each question. If player ratings are assumed to be completely determined based on their responses to the given set of questions, then LRP reduces to ASAG. In this scenario, a solution to ASAG would imply a solution to LRP, but LRP may be solved without solving ASAG. For example, if one question is much more predictive of a respondent's overall rating than other questions, LRP would be able to leverage this correspondence, while ASAG would be forced to grade all questions, each contributing equally to overall error. 
-
-Previous work on ASAG provides a baseline for work on LRP. A recent review by Burrows et al. summarizes advances in ASAG, drawing upon over 80 papers with 35 distinct systems \cite{burrows15}. These systems differ in their natural language processing techniques, model building, grading models, and effectiveness. Each of these systems could be potentially adapted for LRP, offering several possible avenues for future research. Here I focus on the state-of-the-art system developed by Education Testing Services \cite{heilman13}. This system serves both as a representative example of ASAG systems and as a starting point for LRP.
-
-The latest ASAG system created by ETS performs logistic regression to classify responses as correct or incorrect based on two categories of features: word and character n-gram features, and text similarly features between response and answer key or response and other responses. The system also groups questions into different problem domains and then uses a ``domain adaptation'' technique, which introduces three separate copies of each feature for generic, domain-specific, and question-specific weighting. This straightforward logistic regression approach outperformed all other existing techniques on the two tested datasets. The general approach of defining a wide variety of natural language features and training a regression model is common among competing systems.
-
-\section{Methods}
-\subsection{Datasets}
-I use two datasets to evaluate various approaches to LRP. Both datasets are comprised of responses to standardized tests with short answer questions. The first dataset was introduced by Basu et al. (2013) in their work on computer-assisted grading \cite{basu13}. They created the dataset by posing 20 questions from the 2012 United States Citizenship Exam to workers on Amazon Mechnical Turk, collecting a total of 698 responses. 10 of the questions were selected for grading by three human judges, who marked each answer as each correct or incorrect. I refer to this dataset as the ``Powergrading'' dataset, derived from the name of the system that Basu et al. developed.
-
-The second dataset I use for LRP was introduced by Mohler et al. (2011) in their work on ASAG \cite{mohler11}. These data consist of responses to short answer problem set and exam questions in a Data Structures course at the University of North Texas. In total, the dataset contains 24 complete responses to 87 questions. Responses are graded by two human judges on a scale from 0 to 5, and these two grades are averaged together per question. I refer to this dataset as the ``Mohler 11'' dataset. Responses in this dataset are typically longer and more involved than responses in the Powergrading dataset. This level of natural language, combined with the relatively small number of samples, makes the Mohler dataset significantly more challenging for LRP than the Powergrading dataset.
-
-Neither of these datasets are immediately in the format required for LRP. In particular, each question is graded individually, as opposed to each respondent possessing an overall rating. To convert to LRP, I simply add all grades for each respondent and discard the per-question grades. Next I normalize these overall respondent ratings so that all ratings are on a scale of 0 to 1. The final rating preprocessing step is splitting into training and test sets at a ratio of 4 to 1 respectively. To preprocess text responses, I remove all punctuation, stop words, and convert all remaining characters to lowercase.
-
-\begin{figure}[h]
-\centerline{%
-\includegraphics[width=0.5\textwidth]{figures/powerGradingDistribution.png}%
-\includegraphics[width=0.5\textwidth] {figures/mohlerRatings.png}%
-}%
-\caption{Normalized ratings for two datasets used for evaluating approaches to the Luna Prediction Rating problem. The Powergrading dataset, comprised of responses to a subset of the 2012 United States Citizenship Exam, was introduced by Basu et al. (2013) \cite{basu13}. The Mohler data, comprised of responses to problem set and exam questions in a University of North Texas Data Structures course, was introduced by Mohler et al. (2011) \cite{mohler11}. Ratings were computed by summing individual question grades and normalizing.}
-\label{fig:RatingDistribution}
+\begin{figure}
+\begin{scriptsize}
+\begin{center}
+\begin{tikzpicture}[scale=0.2]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [black] (38.9,-3.4) circle (3);
+\draw (38.9,-3.4) node {$landing$};
+\draw [black] (25,-14.6) circle (3);
+\draw (25,-14.6) node {$guest$};
+\draw [black] (38.9,-14.6) circle (3);
+\draw (38.9,-14.6) node {$signup$};
+\draw [black] (52.6,-19.4) circle (3);
+\draw (52.6,-19.4) node {$login$};
+\draw [black] (38.9,-31.2) circle (3);
+\draw (38.9,-31.2) node {$home$};
+\draw [black] (19.7,-40.7) circle (3);
+\draw (19.7,-40.7) node {$interview$};
+\draw [black] (32.6,-40.7) circle (3);
+\draw (32.6,-40.7) node {$response$};
+\draw [black] (45.3,-40.7) circle (3);
+\draw (45.3,-40.7) node {$guess$};
+\draw [black] (59,-40.7) circle (3);
+\draw (59,-40.7) node {$final$};
+\draw [black] (31.9,-22.5) circle (3);
+\draw (31.9,-22.5) node {$info$};
+\draw [black] (38.9,-6.4) -- (38.9,-11.6);
+\fill [black] (38.9,-11.6) -- (39.4,-10.8) -- (38.4,-10.8);
+\draw (38.4,-9) node [left] {$consent$};
+\draw [black] (36.56,-5.28) -- (27.34,-12.72);
+\fill [black] (27.34,-12.72) -- (28.27,-12.61) -- (27.65,-11.83);
+\draw (28.39,-8.51) node [above] {$consent$};
+\draw [black] (40.85,-5.68) -- (50.65,-17.12);
+\fill [black] (50.65,-17.12) -- (50.51,-16.19) -- (49.75,-16.84);
+\draw [black] (50.33,-21.36) -- (41.17,-29.24);
+\fill [black] (41.17,-29.24) -- (42.11,-29.1) -- (41.45,-28.34);
+\draw [black] (36.21,-32.53) -- (22.39,-39.37);
+\fill [black] (22.39,-39.37) -- (23.33,-39.46) -- (22.88,-38.57);
+\draw (24.76,-35.43) node [above] {$new\mbox{ }game$};
+\draw [black] (22.7,-40.7) -- (29.6,-40.7);
+\fill [black] (29.6,-40.7) -- (28.8,-40.2) -- (28.8,-41.2);
+\draw [black] (35.6,-40.7) -- (42.3,-40.7);
+\fill [black] (42.3,-40.7) -- (41.5,-40.2) -- (41.5,-41.2);
+\draw [black] (48.3,-40.7) -- (56,-40.7);
+\fill [black] (56,-40.7) -- (55.2,-40.2) -- (55.2,-41.2);
+\draw [black] (56.29,-39.42) -- (41.61,-32.48);
+\fill [black] (41.61,-32.48) -- (42.12,-33.28) -- (42.55,-32.37);
+\draw [black] (33.78,-24.84) -- (37.02,-28.86);
+\fill [black] (37.02,-28.86) -- (36.91,-27.93) -- (36.13,-28.55);
+\draw [black] (26.97,-16.86) -- (29.93,-20.24);
+\fill [black] (29.93,-20.24) -- (29.78,-19.31) -- (29.02,-19.97);
+\draw [black] (36.91,-16.85) -- (33.89,-20.25);
+\fill [black] (33.89,-20.25) -- (34.79,-19.99) -- (34.05,-19.32);
+\end{tikzpicture}
+\end{center}
+\end{scriptsize}
+\caption{Schematic diagram depicting the primary states of the Luna Rating System web interface. Nodes represent website states and edges indicate how users typically navigate between states. A first-time user arrives at the \textit{landing} state. Upon providing consent, the user may play as a \textit{guest} or \textit{sign up}, both which lead to the \textit{info} state. The info state explains the Luna Game and then directs users to the \textit{home} state. The user can then create a new Luna Game, launching the \textit{interview} state. As the user progresses through the Luna Game, she transitions from interview to \textit{response}, to \textit{guess}, and to \textit{final}. They then return to the home state to start another game. Returning signed up users may \textit{login} from the landing state to reach the home state.}
+\label{statediagram}
 \end{figure}
 
-\subsection{Features}
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{figures/screen1.png}
+\includegraphics[width=0.5\textwidth]{figures/screen2.png}
+\includegraphics[width=0.5\textwidth]{figures/screen3.png}
+\includegraphics[width=0.5\textwidth]{figures/screen4.png}
+\includegraphics[width=0.5\textwidth]{figures/screen5.png}
+\includegraphics[width=0.5\textwidth]{figures/screen6.png}
+\caption{Exemplary screenshots of the Luna website. Clockwise from top left: the landing page, the information page for first-time users, interview phase, response phase, guess phase, and final phase.}
+\label{screenshotpic}
+\end{figure}
 
-Beyond stating LRP as a new problem for the machine learning community, the main contribution of this chapter is a thorough exploration of approaches to the problem. Following the recent work done on ASAG, our strategy is to associate several features with each set of responses, which can be subsequently used for regression. I divide the feature definitions into two categories: question-based features and response-based features. The former takes into account expected responses, while the latter focuses more on data provided by previous rated respondents. I then experiment with several types of regression to combine the features for an optimal model.
+\subsection{An API for Machine Players}
 
-\subsubsection{Question-Based Features}
-I assume now that Luna Game players have a set of expected answers for every question, which I refer to as an ``answer key''. The first time that the Luna Game is played with these questions, the player's only option is to compare the opponent's responses with the answer key. The closer a response is to the expected response, the higher the player's guess of their rating will likely be. Framed in this way, the problem becomes one of measuring the similarity between two samples of natural language.
+To allow AI researchers to enter machines as players on the Luna Rating System website, I implemented a RESTful API. Machine players must first register separately from human players to receive an API token. This process is currently done by hand, since the system is not yet protected against malicious machine players (e.g. there is no limit on the number of API calls that one player may make). With an API token obtained, the experience of machine players is very similar to that of humans. The machine may request to start a new game, provide questions during the interview phase of an ongoing game, receive questions and provide answers during the response phase, provide a guess during the guess phase, and receive updates of its own Smarts Rating and total wins. Notably, the guess of a machine is not factored into the Smarts Rating of its opponent. A Python template, which may be used directly or as a blueprint for other languages, is provided for researchers. 
 
-Measuring semantic similarity between two samples of natural language can be a difficult task. If the two sentences differ only in word order, or only in a few words, then simple approaches can reliably detect similarity. By considering synonyms of the words in both sentences, the similarity measure may be improved. However, in many cases, it is impossible to accurately capture similarity without a deeper semantic understanding of the two sentences. One common approach for representing semantic similarities is to infer vector representations for words in the vocabulary of the training corpus, and then to calculate similarity based on some geometric measure, such as cosine similarity. The problem of inferring these vectors, referred to as neural embeddings, is an active area of research.
-
-In the list below, I present all question-based features considered. In all cases, if there are multiple answers in the answer key, I take the maximum value over all possible values. All question-based features result in a vector whose length is equal to the number of questions in the dataset.
-
-\begin{enumerate}
-\item \textbf{Binary Word Overlap (BWO)}: The $i^{th}$ entry of this feature vector is 1 if any words in the $i^{th}$ response appear in the answer key and 0 otherwise.
-\item \textbf{Fraction Word Overlap (FWO)}: The $i^{th}$ entry of this feature vector is the number of overlapping words in the $i^{th}$ response with the corresponding answer key, divided by the number of words in either the response or the answer key.  
-\item \textbf{Character Edit Distance (CED)}: The $i^{th}$ entry of this feature vector corresponds to the edit distance (Levenshtein distance) between the $i^{th}$ response and the corresponding answer key at the level of characters. The value is 1.0 minus the fraction of the edit distance and the length of the larger string.
-\item \textbf{Word Edit Distance (WED)}:  The $i^{th}$ entry of this feature vector corresponds to the edit distance (Levenshtein distance) between the $i^{th}$ response and the corresponding answer key at the level of words. For example, the WED between ``hello, world'' and ``goodbye, moon'' is 2. The value is 1.0 minus the fraction of the edit distance and the greater number of words in either string.
-\item \textbf{Word2Vec Cosine Similarity (WCS)}: First I train a neural embedding of words using the answer key as a corpus. Then the $i^{th}$ response and the corresponding answer key are compared, and the $i^{th}$ entry of the feature vector is the maximum cosine similarity between the two. I use the library provided by Gensim here \cite{rehurek10}.
-\item \textbf{Semantic Nets (Li et al.) (SNL)}: For a more sophisticated approach to short sentence similarity, I refer to the work of Li et al. (2006) \cite{li06}. They offer a comprehensive metric that takes into account lexical, semantic, and syntactical information about the two sentences being compared. Their system is trained on a corpora of English sentences separate from the training data. I use an existing Python implementation of SNL that uses the NLTK English corpora \cite{nltk}. The output of their similarity measure is a value between 0 and 1. Thus the $i^{th}$ entry of this feature vector contains the SNL similarity measure between the $i^{th}$ response and the corresponding answer key. One notable downside to this algorithm is that it takes significantly more time (up to 20x) than any other feature described in this chapter.
-\end{enumerate}
-
-One inherent challenge in the design of question-based features is the limited size of the answer key. At best, an answer key will document several responses that are considered completely correct. Unfortunately, for open-ended questions, the number of possible completely correct responses can be unbounded. Writing all possible correct responses becomes impractical and many responses may be incorrectly processed due to superficial differences with the answer key. Here I suggest two possible approaches to mitigating this problem. First, the answer key may be multiplied by applying various transformations, such as considering the synonyms of words in the original answer key or performing rearrangements in the syntax of the sentence. Second, as the training set increases, one may choose to include the answers of highly rated players in the answer key. In both cases, one should be sure that growing the answer key does not add prohibitive computational cost.
-
-For future work on developing question-based features for LRP, it may be worthwhile to adapt methods for two related problems: paraphrase detection and textual entailment. Paraphrase detection assesses whether one sample is a paraphrase of the other. Textual entailment is the task of detecting whether one sample of natural language logically implies another sample. For our purposes, I might like to give high ratings to players whose responses imply the answer key, even if they are not exactly the same. Both of these problems are active areas of research in natural language processing and new results will likely be relevant to LRP as well.
-
-\subsubsection{Response-Based Features}
-As a player asks the same questions over several rounds, learning the opponent's true rating at the end of each round, the player's rating model should be updated to take into account the new data. For example, if a new set of responses is very similar to those of a previous opponent, the player's guess of the new opponent's rating should be close to the known rating of the previous opponent. Here I ignore the answer key and consider features that may be extracted solely from responses. In the list below, I present all response-based features tested. 
+In this study, two simple machine players were implemented and entered into the system. Both machines were equipped with a fixed set of 5 questions to present during all Interview Phases for consistency. The questions were:
 
 \begin{enumerate}
-
-\item \textbf{Bag of Words (BOW)}: Our simplest response-based feature is the standard natural language processing technique of Bag of Words. Given all the training data, I begin by creating a shared vocabulary list of all words that appear in any responses. I then associate a binary vector with each response in the training data, where entry $i$ is 1 if the response contains the $i^{th}$ word in the vocabulary and 0 otherwise.
-
-\item \textbf{Bigrams (BIG)}: This feature is the same as BOW, except rather than building a vocabulary of single words, I build a vocabulary of two adjacent words.
-
-\item \textbf{Bag of Synsets (SYN)}: This feature is similar to BOW. I create a thesaurus for every word in the generated vocabulary. I use the WordNet database for finding synonyms \cite{wordnet}. Then I associate a vector for each response in the training data, where entry $i$ is 1 if the response contains any synonyms (including the word itself) of the $i^{th}$ word in the vocabulary.
-
-\item \textbf{Nearest Neighbor via Overlap (NNO)}: This feature is based on the premise that similar responses will result in similar contributions to the respondents' ratings. For a given response, the most similar response in the training set is identified according to the number of overlapping words. The rating of the corresponding respondent is put into the feature vector, so that the final output is a vector containing the ratings of the most similar respondents per question.
-
-\item \textbf{Nearest Neighbor via Character Edit Distance (NNC)}: This feature is the same as NNO, except similarity is defined by character edit distance rather than overlap.
-
-\item \textbf{Nearest Neighbor via Word Edit Distance (NNW)}: This feature is the same as NNO, except similarity is defined by word edit distance rather than overlap.
-
-
+\item What color is the sky?
+\item What is the direct object in this sentence: ``The boy threw the ball to the dog''? 
+\item Why is 6 afraid of 7?
+\item Why does poverty exist?
+\item What is the capital of New York?
 \end{enumerate}
 
-\subsection{Regression}
-With features defined, the task then takes the standard form of a regression problem. For simplicity, I assume here that the rating is a linear combination of the features. I then consider two models of regression. The first is Ordinary Least Squares Linear Regression, which minimizes the sum of squares between predicted and actual ratings. I then run Lasso Regression $(\alpha = 0.1)$, which biases towards simpler models by penalizing the number of nonnegative coefficients in favor of sparse solutions. In both cases, I use the implementations in the Scikit-Learn library for machine learning \cite{pedregosa11}.
+The only distinction between the two machines was their response functions. The first machine, which I refer to as the Gibberish Bot, responds to any question by generating a random string of uppercase characters, digits, and spaces. The length of the response is also randomly selected to be between 1 and 200. This machine is meant to serve as the most basic of controls; if Smarts Ratings are at all meaningful, the Gibberish Bot should have a very low one. The second machine, referred to as the Cleverbot, responds to questions by querying the Cleverbot chatbot, a web-based chatbot that responds to human inputs by outputting previously seen human inputs that are deemed most similar according to simple a surface-level analysis \cite{carpenter2015cleverbot}. Cleverbot is an ideal second control, as it provides responses that have been written by humans, but does not attempt to understand the posed questions with any level of sophistication. Thus one would reasonably expect Cleverbot to achieve a Smarts Rating higher than the Gibberish Bot, but lower than most humans. Both bots played 9 games, alternating one at a time against randomly selected human opponents in the first few days of the launch.
+
+\subsection{Launching the Website}
+
+Given the inclusion of human participants, the study described in this chapter was submitted for review to the Committee on the Use of Human Subjects in Research at Harvard University. The study qualified for expedited review and received approval on February 18, 2016. The website was immediately launched and publicized, primarily via social media and email. Publicity efforts continued for one week following the launch. The results presented in this chapter were gathered from the two weeks following launch, up until March 3, 2016. 
+
 \section{Results}
-I ran OLS Linear Regressions and Lasso Regressions on each of the 12 features for 100 trials. In addition, I included a combination of all 12 features (COM), and two controls. The first control predicts a random rating for a given set of responses (RAN). The second control, which I refer to as the ``constant best guess'', always predicts the average of all previously seen ratings (CBG). To consider a feature useful, it should at least outperform both of these controls on average. I define performance in terms of the Root Mean Square Error between predicted ratings and actual ratings in the test set. The results of these experiments are depicted in Figure 2. Lasso Regression yielded no meaningful differences from OLS, so I depict only the latter.
-\begin{figure}[h]
-\centerline{%
-\includegraphics[width=0.9\textwidth]{figures/ratingPredictionFinalResults.png}%
-}%
-\caption{Fifteen approaches to the Luna Prediction Rating problem on two datasets using Ordinary Least Squares Linear Regression. From the left, the first two approaches represent baseline controls; the following six approaches are each OLS Linear Regressions on single question-based features; the following six are also OLS Linear Regressions, but on single response-based features instead; the last is an OLS Linear Regression that includes all 12 previous features. The Root Mean Square Error averaged over 100 trials is plotted for each approach. Refer to the text for the feature abbreviations.}
-\label{fig:RatingDistribution}
+
+\subsection{Traffic Summary}
+
+In the first two weeks of the Luna web implementation, the site attracted 1,293 registered players (including the two machine players). 685 Luna Games were initiated, leading to the creation of 4,173 unique questions and 4,923 responses. According to Google Analytics, the website earned 2,312 sessions and 2,937 page views. A little over 30\% of visitors of the site were returning visitors. 54\% of the visitors came to the site directly, e.g. through clicking a link in their email or typing the URL manually, while the remaining visitors were referred primarily through Facebook and Twitter. The daily number of sessions is plotted in Figure \ref{trafficplot}. As expected, the amount of traffic correlates strongly with publicity efforts, which were concentrated in the first few days of the launch and virtually ceased after one week.
+
+\begin{figure}
+\includegraphics[width=0.95\textwidth]{figures/trafficPlot.png}
+\caption{Daily traffic to the Luna web implementation in the first two weeks after launch. Publicity for the site was concentrated in the first few days of the launch and virtually ceased after one week.}
+\label{trafficplot}
 \end{figure}
 
-The relative performances of the approaches seem to be consistent between the two datasets tested. As expected, the Mohler 11 dataset proves far more difficult, likely due to the very limited size of the training set, the large number of responses per respondent, and the longer length of each response. Also unsurprising is the result that for OLS Linear Regression, a combination of all features outperforms any single feature. The combination does not perform as comparably well in Lasso Regression, presumably because the number of features actually included is small due to the penalty term. In both cases, any margin of improvement offered by a combination of all features is slim. Simple response-based features such as Bag of Words or Nearest Neighbor via Overlap are competitive with the combination. In practice, it may be preferable to use one or both of these due to the savings in computational resources. Among the question-based features, Binary Word Overlap fares the best, but cannot outperform the Constant Best Guess baseline. In future work, the question-based features could likely be improved by augmenting the answer keys as discussed above.
+\subsection{Human Player Summary}
+
+The vast majority of human players registered as guests, as opposed to giving their emails: 1,207 were guests and 86 registered with emails. One consequence of this discrepancy is that only a small fraction of users were able to receive email updates when it was their turn to play in a Luna Game. In addition, many users appear to have registered as guests and then left the site without submitting interview questions; the overall average number of games played was 0.33, with a median of 0. This is not to say that the guest registration option was ill-advised; it is likely that removing the guest option would have yielded far fewer registrations overall. However, anecdotal evidence suggests that the frequent stalling of Luna Games, due to guests leaving in the middle of a Game, led to frustration among more dedicated players. Among the 220 players who did complete at least one full game, the average Smarts Rating was 68.9, with a median of 74. The full distribution of Smarts Ratings for human players is depicted in Figure \ref{humansmartsratings}. The ratings exhibit a bell curve roughly around the mean with a few low outliers. 
+
+%In Figure \ref{smartsratingscorrelation}, I consider whether Smarts Ratings are correlated with the number of games played or won. 
+
+\begin{figure}
+\includegraphics[width=0.95\textwidth]{figures/ratingDistribution.png}
+\caption{\label{humansmartsratings} Smarts Rating distribution of human players who completed at least one full Luna Game. The ratings exhibit a bell curve roughly around the mean of 68.9 with a few low outliers.}
+\end{figure}
+
+\subsubsection{Sample Questions and Responses}
+
+I plan to publicly release the complete dataset of questions and responses through the Harvard Dataverse Network after the submission of this thesis. The below 10 examples are meant to be representative of the full dataset in terms of question and response length, form, and content.
+
+\begin{enumerate}
+
+\item Q: Is addiction a disease, as is increasingly being claimed, or is the addict at fault for developing their addiction?
+\\ A: a bit of each; people can be psychologically and/or genetically liable to develop addictions, but with sufficient willpower they needn't
+
+\item Q: Apparently, our senses can detect around 11 million pieces of information per second. How much total can a human process of this 11 million? A: 10 of those B: all 11 million C: 25 to 30 of those D: 5 to 7 of those
+\\ A: B
+
+\item Q: Compose a limerick involving the word jello.
+\\ A: hey there fellow; I hate jello; it's not tasty; I'm being hasty; hard question, well-oh...
+
+\item Q: What is the biggest risk from self-driving cars?
+\\ A: Two things.  First, we currently have no way of integrating self-driving cars into current traffic patterns.  The self-driving cars are better at driving than people are, and a road with only self-driving cars would be much safer and far more efficient, but trying to work around humans will cause all sorts of headaches and loss of efficiency.  For example, there are algorithms for having autonomous cars coordinate at interesections so that they can all drive through a full speed from all directions and never hit each other; if you had to throw even one human-driven car into that mix, then whole system would have to stop.  Second, current cars are disturbingly hackable.  Security researchers have demonstrated over and over that it's super easy to remotely take control of a car, and have the ability to mess with it in all kinds of ways (e.g. disable the breaks), but car companies just don't care and will not implement any security because consumers don't care and it would cost the companies extra money.  Obviously as cars become even more autonomous, this security risk will grow even further.  Sorry, that was really long... but I spend too much time thinking about these things.
+
+\item Q: What causes the McGurk effect?
+\\ A: Our brain confuses visual inputs with auditory ones.
+
+\item Q: What is the strangest experience you have ever had while riding a bus?
+\\ A: Overhearing a taxidermist telling a random person how much he loved his job and then asking how their pet was doing
+
+\item Q: Who am I?
+\\ A: Is a question that usually strikes us with the most weight around the age of 50.
+
+\item Q: Should Supreme Court positions have term limits?
+\\ A: don't understand the question. is this about USA? this game is worldwide.
+
+\item Q: Who is/was the most influencial person in your life?
+\\ A: I am
+
+\item Q: Describe an algorithm for walking
+\\ A: Brain signal -> knee. ^ knee. Increment 37 degrees. +1.5 feet forward. Repeat for other knee.
+\end{enumerate}
+
+\subsection{Machine Player Summary}
+
+After 9 games each, the Gibberish Bot achieved a Smarts Rating of 6.4, and Cleverbot arrived at a Smarts Rating of 40.4. All opponents but one guessed a Smarts Rating of 1 for the Gibberish Bot; the remaining opponent guessed 50. Guesses of Cleverbot's Smarts Rating ranged from 5 to 88. To illustrate the typical behavior of each of these machines during the Response phase, I provide representative samples below.
+
+\subsubsection{Gibberish Bot Response Phase Sample}
+\begin{enumerate}
+\item Q: How old are you?
+\\A: WE23 F1MTR4FI7YBT16JYRV8AWEY7ALLLXI3M79 1BSL8G
+
+\item Q: Will your answer to this question be wrong?
+\\A: MGKGJNYJYHP4XM2J35TQ BF4GNNERA77Z20ZVULH
+
+\item Q: Is the space L\^2 complete?
+\\A: DZTYWUKXE4D13B58A823VA8 22ZLZ19FQAGPEMQ
+
+\item Q: What is a contradiction to the CAPM model of financial markets?
+\\A: PGIITGJWK0NFBTOT
+
+\item Q: What is a bound on spectral sparsification of complete graphs?
+\\A: NS2TEEMRSL91ANNF 4LDK2M5YSI4I1JVU6SV74LUKNVAH
+\end{enumerate}
+Guess: 1
+
+\subsubsection{Cleverbot Response Phase Sample}
+\begin{enumerate}
+\item Q: What is your favorite book and please describe it in 3 words.
+\\A: Howl by Allen Ginsberg.
+
+\item Q: What's the best thing you did today?
+\\A: The moment that I fell in love was the best thing I have seen. You?
+
+\item Q: What is your favorite number from 1 to 10 and why?
+\\A: Number 13 is my favorite number.
+
+\item Q: What is the best machine ever invented?
+\\A: Back to the Future is the best movie ever.
+
+\item Q: What is your biggest accomplishment of the last year?
+\\A: All the time I HAVEN'T spent talking to you!
+\end{enumerate}
+Guess: 40
+
+\subsection{Game Summary}
+
+Among the 685 initiated Luna Games, 292 were followed through to the final phase by both players. The average and median phases of Luna Games after two weeks were both the Response phase, i.e. the middle of the game. To see if there is any obvious correlation between the length of responses and the subsequent guess of the Smarts Rating of the responder, I created a scatterplot of response length and subsequent guess (Figure \ref{responseLengthGuess}). The relationship between response length and guess gives a Pearson's $r$ of 0.179, suggesting a weak positive correlation. One interpretation of this result is that players who put more effort into their responses are rewarded with higher Smarts Ratings.
+
+\begin{figure}
+\includegraphics[width=0.95\textwidth]{figures/responseVsGuesses.png}
+\caption{\label{responseLengthGuess} Relationship between response length and subsequent guess of the responder's Smarts Rating. Pearson's $r$ is 0.179, suggesting a weak positive correlation.}
+\end{figure}
+
+It is impossible to assess whether Smarts Ratings are accurate without presuming some ground truth about intelligence. However, one encouraging sign would be the convergence of a player's Smarts Rating as she continues to play games. In Figure \ref{smartRatingStds}, I plot the standard deviations of Smarts Ratings per player as a function of the number of games each has completed. No such convergence is yet observed, likely indicating that more playing time is necessary for the system to reach an equilibrium in which a shared understanding of Smarts Ratings is held by most players. 
+
+\begin{figure}
+\includegraphics[width=0.95\textwidth]{figures/varianceGamesPlayed.png}
+\caption{\label{smartRatingStds} Standard deviations of Smarts Ratings per player as a function of number of games completed. Convergence as the number of games increases is not yet observed. Note that the values in the plot are standard deviations, and the error bars are standard deviations (over all players) of standard deviations.}
+\end{figure}
+
+\section{Analysis}
+
+The first goal of this chapter --- to demonstrate that a straightforward web implementation of the Luna Rating System can draw players and sustain games --- is readily reached. Given the relatively minor publicity efforts, unaided by any sort of financial expenditures, the substantial traffic to the website within the short time window is very encouraging. The Smarts Ratings reached by both human and machine players are also auspicious. The bell curve observed for humans is consistent with the distribution of IQ, for example. Moreover, the Smarts Ratings of the machines --- 6.4 for the Gibberish Bot and 40.4 for Cleverbot --- indicate the success of the controls. As expected, the Gibberish Bot reached a much lower rating than Cleverbot, and Cleverbot remained significantly lower than the majority of human players. These results corroborate the semantic value of Smarts Ratings and suggest that human players understand the basic notion behind the ratings.
+
+While the machine Smarts Ratings align with expectations, the extent to which ratings can meaningfully distinguish between human players is less clear. The weak correlation between response length and subsequent guess can be interpreted in two ways. Optimistically, one would expect that players who are more dedicated to demonstrating intelligence might write longer responses, thus deserving higher Smarts Ratings. Pessimistically, one could argue that Smarts Ratings are just a measure of response length, rather than intelligence. Future work could distinguish between these interpretations by enforcing a stricter limit on response lengths, or by attempting to correlate Smarts Ratings with other metrics of intelligence like IQ. Additionally, the lack of convergence of Smarts Ratings suggests that more time is needed for the system to reach an equilibrium. Once such convergence is observed, the discriminative power of Smarts Ratings will be more clear.
+
+The qualitative results presented in this chapter, consisting mainly of the questions and responses of human players, are perhaps the most encouraging. The questions exhibit a wide range of form, content, length, and difficulty. Some questions are yes/no, multiple choice, or fill in the blank, while others anticipate lengthy free form responses. Some questions are straightforward trivia or simple and subjective (e.g. ``How are you?''), but many require high levels of understanding and logical reasoning. For example, many questions resemble open-ended prompts that one might expect to see on a standardized writing test (e.g. ``Do schools put too much or too little time into Phys. Ed. classes?''). The subsequent responses to these questions are equally broad. The full dataset offers intriguing insight into how humans define and assess intelligence. Moreover, the questions elicited are questions that a machine must be able to adequately answer if it is to be called artificially intelligent.
 
 \section{Discussion}
-In this chapter, I defined the Luna Rating Prediction problem of guessing a respondent's rating based on previous observations of responses and ratings. I discussed the closely related problem of Automatic Short Answer Grading and demonstrated how datasets and methods for ASAG can be adapted for LRP. I then presented initial work on LRP, which centered around several features of response sets that I use to learn a model for predicting ratings. These features were presented in two categories: question-based features, which rely only on a preset answer key, and response-based features, which ignore the answer key but take advantage of seen responses from previous rated respondents. I combined these features using traditional regression techniques to arrive at a comprehensive system for LRP.
 
-For a player of the Luna Game, the ability to solve LRP is critical. The outcome of a Game hinges on the difference between predicted ratings and actual ratings. A human player may take advantage of the machine learning approaches to LRP offered here, but more likely the human will learn to rate well after several rounds of play without any formalisms or explicit machine learning. This human ability is based on an understanding of natural language, a deep knowledge base, and the relative ease with which humans judge one another in everyday scenarios. As machine players build an understanding of natural language and a knowledge base from answering questions in the Luna Game, these advances should be transferrable to LRP as well. A truly intelligent player of the Luna Game is unlikely to consider LRP and question answering as completely separate problems, but rather as manifestations of one general underlying problem.
+The results reported in this chapter demonstrate the promising potential of the Luna Rating System as an active and informative benchmark for AI. The study also highlights critical design considerations for future implementations. Perhaps the most confounding aspect of this web implementation was the prevalence of stalled Luna Games. A game becomes stalled when one of the players leaves the website in the middle of the game and does not return. The remaining player is left waiting until the game expires due to inactivity (which currently occurs after 3 days). While waiting players are welcome to start simultaneous games, it is likely discouraging to see a backlog of unfinished games; the incentive to start a new game diminishes as the expectation that games will be finished decreases. If a player registers with an email address, the likelihood that she will return to games improves, as the system automatically sends an email to notify her when it is her turn to play. Thus a central objective in future design should be to obtain valid email addresses. Other ways to further persuade players to stay and play should also be considered.
 
-Throughout this chapter, I sought to treat LRP as a general problem beyond the scope of the Luna Game, since I expect work on the problem to have several applications. Any situation in which a judge wishes to automatically evaluate a respondent can be thought of as an instance of LRP. The quantity being evaluated may be completely known to the respondent, as is the case in the Luna Game. However, in some applications, the quantity may be only partially known or unknown. For example, consider the case of a government official wishing to estimate the probability that a convict will repeat an offense based on questionnaire responses, or the case of an health insurance company wishing the estimate the amount of money that a customer will require for medical care. These real life applications combined with the motivation provided by the Luna Game make LRP a problem worthy of further study.
-%
-%\pagebreak
-%\bibliographystyle{abbrvnat}
-%
-%\begin{thebibliography}{}
-%
-%\bibitem{basu13}
-%Basu, Sumit, Chuck Jacobs, and Lucy Vanderwende. ``Powergrading: a clustering approach to amplify human effort for short answer grading.'' Transactions of the Association for Computational Linguistics 1 (2013): 391-402.
-%
-%\bibitem{nltk}
-%Bird, Steven, Edward Loper and Ewan Klein (2009), Natural Language Processing with Python. O'Reilly Media Inc.
-%
-%\bibitem{burrows15}
-%Burrows, Steven, Iryna Gurevych, and Benno Stein. ``The Eras and Trends of Automatic Short Answer Grading.'' International Journal of Artificial Intelligence in Education 25.1 (2015): 60-117.
-%
-%\bibitem{heilman13}
-%Heilman, Michael, and Nitin Madnani. ``ETS: domain adaptation and stacking for short answer scoring.'' Proceedings of the 2nd joint conference on lexical and computational semantics. Vol. 2. 2013.
-%
-%\bibitem{li06}
-%Li, Yuhua, et al. ``Sentence similarity based on semantic nets and corpus statistics.'' Knowledge and Data Engineering, IEEE Transactions on 18.8 (2006): 1138-1150.
-%
-%\bibitem{mohler11}
-%Mohler, Michael, Razvan Bunescu, and Rada Mihalcea. ``Learning to grade short answer questions using semantic similarity measures and dependency graph alignments.'' Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies-Volume 1. Association for Computational Linguistics, 2011.
-%
-%\bibitem{pedregosa11}
-%Pedregosa, Fabian, et al. ``Scikit-learn: Machine learning in Python.'' The Journal of Machine Learning Research 12 (2011): 2825-2830.
-%
-%\bibitem{pulman05}
-%Pulman, Stephen G., and Jana Z. Sukkarieh. ``Automatic short answer marking.'' Proceedings of the second workshop on Building Educational Applications Using NLP. Association for Computational Linguistics, 2005.
-%
-%\bibitem{rehurek10}
-%Rehurek, Radim, and Petr Sojka. ``Software framework for topic modelling with large corpora.'' (2010).
-%
-%\bibitem{sukkarieh09}
-%Sukkarieh, Jana Zuheir, and John Blackmore. ``c-rater: Automatic Content Scoring for Short Constructed Responses.'' FLAIRS Conference. 2009.
-%
-%\bibitem{wordnet}
-%Princeton University ``About WordNet.'' WordNet. Princeton University. 2010. $<$http://wordnet.princeton.edu$>$
-%
-%\bibitem{zia12}
-%Ziai, Ramon, Niels Ott, and Detmar Meurers. ``Short answer assessment: Establishing links between research strands.'' Proceedings of the Seventh Workshop on Building Educational Applications Using NLP. Association for Computational Linguistics, 2012.
-%
-%
-%\end{thebibliography}
-%
+The primary question left unanswered in this chapter is: what levels of participation are required for Smarts Ratings to reach an equilibrium? There are two dimensions of participations that likely affect this convergence: total number of players, and duration of play. I suspect that increasing the duration of play, i.e. the number of games played per player, is more important than increasing the number of players. An individual player develops an understanding of Smarts Ratings over time as she finishes games and true Smarts Ratings are revealed. The majority of players in this first web implementation have finished no games at all, meaning that they have no empirical basis from which to infer ratings. It is quite possible that even a much smaller cohort of players, each of whom plays several games, would reach a Smarts Rating equilibrium. Future efforts should be focused on achieving this equilibrium; the informativeness of the Luna Rating System depends on the precision of Smarts Ratings.
+
+In addition to revealing refinements for future Luna web implementations, this chapter presents an intriguing original dataset that alone offers several clear avenues for future work. There is the social psychology angle: how do people assess one another's intelligence in practice? There is the NLP perspective: what linguistics features of responses are correlated with subsequent guesses? Simply grouping the questions and responses thematically may reveal rich trends. All participants have undergone a consent process in which they acknowledge that their questions and responses may be released as part of a publicly available dataset. I plan to compile such a dataset and release it through the Harvard Dataverse Network in the hope of enabling others to conduct their own analyses.
