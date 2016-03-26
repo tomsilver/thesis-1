@@ -47,7 +47,7 @@ For players $p, p' \in P$, player $p$ has an \textit{Actual Guess} of the Smarts
 
 \theoremstyle{definition}
 \begin{definition}{Intelligence}\\
-The \textit{Intelligence} of a player $p \in P$ is the expected Actual Guess of an opponent. This is written as $I(p) \triangleq E_{p' \in P}[G^*(p', p)]$.
+The \textit{intelligence} of a player $p \in P$ is the expected Actual Guess of an opponent. This is written as $I(p) \triangleq E_{p' \in P}[G^*(p', p)]$.
 \end{definition}
 
 \section{Theoretical Effects of Strategies on Smarts Rating Validity}
@@ -56,7 +56,7 @@ LRS presents two goals for players: to win Luna Games, and to achieve high Smart
 
 \subsection{Honest Play}
 
-If players always have Reported Guesses that are the same as their Actual Guesses, then Smarts Ratings will align with Intelligences over time. This follows directly from the formalized definition of intelligence given above. Thus LRS designers should take every measure to encourage honest play.
+If players always have Reported Guesses that are the same as their Actual Guesses, then Smarts Ratings will align with intelligences over time. This follows directly from the formalized definition of intelligence given above. Thus LRS designers should take every measure to encourage honest play.
 
 \subsection{Single Priority Play}
 
@@ -110,7 +110,7 @@ How should a first-time Luna Game player formulate her Guess? There are several 
 
 \subsubsection{Known Initialization}
 
-As described in the introduction, a known constant initialization value for Smarts Ratings could lead to an abrupt collapse in Smarts Ratings. Many early players would likely recognize that (1) new players have the same Smarts Rating and (2) most players are new, and therefore (3) the strategy of guessing the initialization value is highly effective. The result would be a quick collapse in Smarts Ratings to the initialization value, from which the system could not recover. 
+As described in the introduction of this chapter, a known constant initialization value for Smarts Ratings could lead to an abrupt collapse in Smarts Ratings. Many early players would likely recognize that (1) new players have the same Smarts Rating and (2) most players are new, and therefore (3) the strategy of guessing the initialization value is highly effective. The result would be a quick collapse in Smarts Ratings to the initialization value, from which the system could not recover. 
 
 There are three alternatives to initialization with a constant value. The first is initialization according to some predefined ``quiz''. This option is unattractive, not only because it primes players to think of intelligence in a particular way, but also because it induces players to ask similar questions to try to mimic the quiz. The second alternative is random initialization. While avoiding theoretical problems, this option has the practical downside of discouraging players who are randomly initialized low Smarts Ratings. It also makes the opponent's job of Guessing first time players an arbitrary endeavor.
 
@@ -138,7 +138,7 @@ An experiment runs for $T$ time steps. At each time step, two players are random
 
 \subsubsection{Baseline}
 
-Since Smarts Ratings and intelligences are both on a scale from 0 to 100, one baseline for the $L_1$ distance between the two is achieved by Reported Guessing a constant value. Doing so would result in an expected error of 50. Another baseline is given by the expected distance between two uniformly randomly selected points from the domain of Smarts Ratings. For two random variables $A_1$ and $A_2$ drawn independently from the uniform distribution over $[0, 100]$, let $B$ be a r.v. given by $B = max(A_1, A_2)$, and let $C$ be a r.v. given by $C = min(A_1, A_2)$. By symmetry, $E[100 - C] = E[B]$. Furthermore, the expected value of $B$ is half that of $C$ (this can be derived by conditioning on the values of $A_1$ and $A_2$), so $2E[B] = E[C] \implies E[C-B] = E[B]$. Now note that $B + (C-B) + (100-C) = 100$, so $3E[C-B] = 100 \implies E[C-B] = \frac{100}{3}$. Thus $33.33$ is one appropriate baseline for the $L_1$ error of Smarts Ratings.
+Since Smarts Ratings and intelligences are both on a scale from 0 to 100, one baseline for the $L_1$ distance between the two is achieved by Reported Guessing a constant value. Doing so would result in an expected error of 50. Another baseline is given by the expected distance between two uniformly randomly selected points from the domain of Smarts Ratings. For two random variables $A_1$ and $A_2$ drawn independently from the uniform distribution over $[0, 100]$, let $B$ be a random variable given by $B = max(A_1, A_2)$, and let $C$ be a random variable given by $C = min(A_1, A_2)$. By symmetry, $E[100 - C] = E[B]$. Furthermore, the expected value of $B$ is half that of $C$ (this can be derived by conditioning on the values of $A_1$ and $A_2$), so $2E[B] = E[C] \implies E[C-B] = E[B]$. Now note that $B + (C-B) + (100-C) = 100$, so $3E[C-B] = 100 \implies E[C-B] = \frac{100}{3}$. Thus $33.33$ is one appropriate baseline for the $L_1$ error of Smarts Ratings.
 
 A third baseline can be derived by assuming that all players give fixed random Reported Guesses (independent from Actual Guesses). In this case, all Smarts Ratings will approach the expected value, and the error will be the expected difference from the expected value to a randomly drawn Smarts Rating. In terms of the parameters used in this simulation, Figure \ref{fig:RandomGuess} shows that mean error starts around the 33.33 baseline and approaches 25, while maximum error stays above 50. 
 
@@ -154,14 +154,14 @@ A third baseline can be derived by assuming that all players give fixed random R
 
 \subsubsection{Honest Play}
 
-Honest players give Reported Guesses that are equivalent to their Actual Guesses. If all players are honest, Smarts Ratings quickly converge to Intelligences, as shown in Figure \ref{fig:HonestGuess}. Inducing Honest Play should be the foremost goal of LRS designers.
+Honest players give Reported Guesses that are equivalent to their Actual Guesses. If all players are honest, Smarts Ratings quickly converge to Intelligences, as shown in Figure \ref{fig:HonestGuess}. Inducing honest play should be the foremost goal of LRS designers.
 
 \begin{figure}[h]
 \centerline{%
 \includegraphics[width=0.5\textwidth]{figures/robustness/Honest_Guessing21.png}%
 \includegraphics[width=0.5\textwidth] {figures/robustness/Honest_Guessing22.png}%
 }%
-\caption{Mean and maximum $L_1$ error of Smarts Ratings when all $N$ players Guess honestly. Honest play is defined by consistent equivalence between the player's Reported Guesses and Actual Guesses. Smarts Ratings quickly converge to intelligences if all players are Honest.}
+\caption{Mean and maximum $L_1$ error of Smarts Ratings when all $N$ players Guess honestly. Honest play is defined by consistent equivalence between the player's Reported Guesses and Actual Guesses. Smarts Ratings quickly converge to intelligences if all players are honest.}
 \label{fig:HonestGuess}
 \end{figure}
 
@@ -213,32 +213,32 @@ If only a fraction of players use the strategy, the error depends linearly on th
 \label{fig:QuantileGuessFrac}
 \end{figure}
 
-What if the distribution is revealed once a certain number of games have been played? Perhaps the collapsing to a constant problem will be avoided? To test this hypothesis, the simulation in Figure \ref{fig:QuantileGuessDelay} introduces players that play with Honest Guessing for a variable number of time steps, and then play with Quantile Guessing for 500 time steps. The delay in introducing Quantile Guessing does indeed improve the $L_1$ error within the time frame tested, though significant error remains after 500 time steps for all tested delays. 
+What if the distribution is revealed once a certain number of games have been played? Perhaps the collapsing to a constant problem will be avoided? To test this hypothesis, the simulation in Figure \ref{fig:QuantileGuessDelay} introduces players that play with honest guessing for a variable number of time steps, and then play with Quantile Guessing for 500 time steps. The delay in introducing Quantile Guessing does indeed improve the $L_1$ error within the time frame tested, though significant error remains after 500 time steps for all tested delays. 
 
 \begin{figure}[H]
 \centerline{%
 \includegraphics[width=0.5\textwidth]{figures/robustness/Delayed_Quantile_Guessing41.png}%
 \includegraphics[width=0.5\textwidth] {figures/robustness/Delayed_Quantile_Guessing42.png}%
 }%
-\caption{Mean and maximum $L_1$ error of Smarts Ratings when $N$ players give Honest Guesses for some number of delay time steps, and then shift to the Quantile Guessing strategy for 500 additional time steps. The shift delay is negatively correlated with Quantile Guessing, suggesting that the negative impact of the strategy decreases if it is introduced after LRS has already stabilized.}
+\caption{Mean and maximum $L_1$ error of Smarts Ratings when $N$ players give honest guesses for some number of delay time steps, and then shift to the Quantile Guessing strategy for 500 additional time steps. The shift delay is negatively correlated with Quantile Guessing, suggesting that the negative impact of the strategy decreases if it is introduced after LRS has already stabilized.}
 \label{fig:QuantileGuessDelay}
 \end{figure}
 
 \subsection{Combined Strategies}
 
-In a real instantiation of LRS, it is unlikely that any single strategy will be adopted by all players. Thus the extreme results portrayed above are not of urgent concern. More likely is a situation where a small fraction of players adopt each of the strategies above. For the purpose of simulation, I assume that some fraction of players will play honestly, and the remaining players will be evenly divided among the strategies described above: Random Guessing, Minimum Guessing, Mean Guessing, and Quantile Guessing. Figure \ref{fig:Combined} shows that the relationship between error and honest player proportion is linear, as might be expected given the previous simulations. Roughly, for every additional 10\% of players that forgo Honest Guessing in favor of one of the other strategies, the mean $L_1$ error increases by 3.5.
+In a real instantiation of LRS, it is unlikely that any single strategy will be adopted by all players. Thus the extreme results portrayed above are not of urgent concern. More likely is a situation where a small fraction of players adopt each of the strategies above. For the purpose of simulation, I assume that some fraction of players will play honestly, and the remaining players will be evenly divided among the strategies described above: Random Guessing, Minimum Guessing, Mean Guessing, and Quantile Guessing. Figure \ref{fig:Combined} shows that the relationship between error and honest player proportion is linear, as might be expected given the previous simulations. Roughly, for every additional 10\% of players that forgo honest guessing in favor of one of the other strategies, the mean $L_1$ error increases by 3.5.
 
 \begin{figure}[H]
 \centerline{%
 \includegraphics[width=0.5\textwidth]{figures/robustness/Combined_Dishonest_Strategies31.png}
 \includegraphics[width=0.5\textwidth] {figures/robustness/Combined_Dishonest_Strategies32.png}%
 }%
-\caption{Mean and maximum $L_1$ error of Smarts Ratings when some fraction of $N$ players give Honest Guesses, and the remaining players are split evenly among Random Guessing, Minimum Guessing, Mean Guessing, and Quantile Guessing strategies. The relationship between error and honest player proportion is linear.}
+\caption{Mean and maximum $L_1$ error of Smarts Ratings when some fraction of $N$ players give honest guesses, and the remaining players are split evenly among Random Guessing, Minimum Guessing, Mean Guessing, and Quantile Guessing strategies. The relationship between error and honest player proportion is linear.}
 \label{fig:Combined}
 \end{figure}
 \section{Implications for LRS Design}
 
-The theoretical and simulation results discussed in this chapter provide a cautionary tale for LRS designers. The system should be successful if all players practice Honest Play, but other strategies, such as Random Guessing, Minimum Guessing, Mean Guessing, and Quantile Guessing, threaten to undermine the validity of Smarts Ratings. Fortunately, these strategies can be grouped into two categories: strategies that are unlikely, and strategies that can be prevented. 
+The theoretical and simulation results discussed in this chapter provide a cautionary tale for LRS designers. The system should be successful if all players practice honest play, but other strategies, such as Random Guessing, Minimum Guessing, Mean Guessing, and Quantile Guessing, threaten to undermine the validity of Smarts Ratings. Fortunately, these strategies can be grouped into two categories: strategies that are unlikely, and strategies that can be prevented. 
 
 Random Guessing and Minimum Guessing belong in the unlikely strategy group. Random Guessing would be a bizarre long-term choice; the strategy gives a player no advantage in either Smarts Rating or Luna Game outcomes. Minimum Guessing is also unlikely for the player who realizes the personal benefit in terms of relative Smarts Ratings is very small. Minimum Guessing can also claim membership to the preventable strategy group; players practicing this strategy can be quickly identified by the system and banned for violating the spirit of play. Since they rely on the distribution of Smarts Ratings, Mean Guessing and Quantile Guessing are also easily avoidable; the distribution can simply be withheld from players. The distribution may also be withheld initially and introduced once the system has evolved and stabilized. This delay would improve Quantile Guessing for players, and these later players would introduce less error to Smarts Ratings by using the strategy.
 
