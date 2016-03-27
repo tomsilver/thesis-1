@@ -14,7 +14,7 @@ The task implicit in the Guess Phase is best clarified in terms independent from
 \centerline{%
 \includegraphics[width=0.95\textwidth]{figures/lrpformalization.png}%
 }%
-\caption{Training data representation in Luna Rating Prediction. Each input is an ordered set of natural language responses to a fixed set of questions. Each response is encoded by the sum of one-hot vectors of the features active in the response. In this example, features are simply unigrams. The encoded responses are concatenated together to form the final input representation. The training data consists of this input representation and the corresponding target rating, which is a real value between 0 and 1 inclusive.}
+\caption{Training data representation in Luna Rating Prediction. Each input is an ordered set of natural language responses to a fixed set of questions. Each response is encoded by the sum of one-hot vectors of the features active in the response. In this example, features are simply unigrams. The encoded responses are concatenated together to form the final input representation. The training data consists of this input representation and the corresponding target rating, which is a real value between $0$ and $1$ inclusive.}
 \label{fig:lrpformalization}
 \end{figure}
 
@@ -29,7 +29,7 @@ While the two problems deserve separate treatments, previous work on ASAG can st
 
 \section{Methods}
 \subsection{Datasets}
-I use two datasets to evaluate various approaches to LRP. Both datasets are comprised of responses to standardized tests with short answer questions. The first dataset was introduced by \citet{basu2013powergrading} in their work on computer-assisted grading. They created the dataset by posing 20 questions from the $2012$ United States Citizenship Exam to workers on Amazon Mechanical Turk, collecting a total of $698$ responses. $10$ of the questions were selected for grading by three human judges, who marked each answer as each correct or incorrect. I refer to this dataset as the ``Powergrading'' dataset, derived from the name of the system that  \citet{basu2013powergrading} developed.
+I use two datasets to evaluate various approaches to LRP. Both datasets are comprised of responses to standardized tests with short answer questions. The first dataset was introduced by \citet{basu2013powergrading} in their work on computer-assisted grading. They created the dataset by posing $20$ questions from the $2012$ United States Citizenship Exam to workers on Amazon Mechanical Turk, collecting a total of $698$ responses. $10$ of the questions were selected for grading by three human judges, who marked each answer as each correct or incorrect. I refer to this dataset as the ``Powergrading'' dataset, derived from the name of the system that  \citet{basu2013powergrading} developed.
 
 The second dataset I use for LRP was introduced by \citet{mohler2011learning} in their work on ASAG. These data consist of responses to short answer problem set and exam questions in a Data Structures course at the University of North Texas. In total, the dataset contains $24$ complete responses to $87$ questions. Responses are graded by two human judges on a scale from $0$ to $5$, and these two grades are averaged together per question. I refer to this dataset as the ``Mohler $11$'' dataset. Responses in this dataset are typically longer and more involved than responses in the Powergrading dataset. This level of natural language, combined with the relatively small number of samples, makes the Mohler dataset significantly more challenging for LRP than the Powergrading dataset.
 
@@ -40,7 +40,7 @@ Since they were collected for ASAG, neither of these datasets are immediately in
 \includegraphics[width=0.5\textwidth]{figures/powerGradingDistribution.png}%
 \includegraphics[width=0.5\textwidth] {figures/mohlerRatings.png}%
 }%
-\caption{Normalized ratings for the two datasets used for evaluating approaches to the Luna Prediction Rating problem. The Powergrading dataset, comprised of responses to a subset of the 2012 United States Citizenship Exam, was introduced by \citet{basu2013powergrading}. The Mohler 11 data, comprised of responses to problem set and exam questions in a University of North Texas Data Structures course, was introduced by \citet{mohler2011learning}. Ratings were computed by summing individual question grades and normalizing.}
+\caption{Normalized ratings for the two datasets used for evaluating approaches to the Luna Prediction Rating problem. The Powergrading dataset, comprised of responses to a subset of the $2012$ United States Citizenship Exam, was introduced by \citet{basu2013powergrading}. The Mohler $11$ data, comprised of responses to problem set and exam questions in a University of North Texas Data Structures course, was introduced by \citet{mohler2011learning}. Ratings were computed by summing individual question grades and normalizing.}
 \label{fig:RatingDistribution}
 \end{figure}
 

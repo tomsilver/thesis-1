@@ -17,9 +17,9 @@ The baseline success of the LRS implementation can be easily measured through tr
 
 My implementation of the Luna Rating System is built on the open-source software stack consisting of MongoDB, Express.js, Angular.js, and Node.js, which is collectively referred to as the MEAN stack \citep{karpov2013mean}. The latter three technologies are all written in JavaScript and MongoDB is a NoSQL database. At a very high level, MongoDB stores all player and game data, Angular.js controls and displays the client side, Express.js forms the foundation of the server side, and Node.js runs the code written on top of that foundation. Notable libraries used include: Mongoose.js, a Node.js library for interfacing with MongoDB; Passport.js, a Node.js library which provides middleware for user authentication; and Angular-UI, an Angular.js library that simplifies routing, i.e. navigation between different states of the website. The front end of the website, i.e. the style, formatting, and organization of content, was modified from the ``Material Admin'' LESS/Angular.js template, for which I purchased a single application license. The site was developed locally and then hosted on EC2 by Amazon Web Services under the domain name ``luna-game.com''.
 
-The website?s wireframe layout was first prototyped on paper, which allowed for iteration on the skeletal design \citep{rettig1994prototyping}. The centerpiece of the website is the ongoing Luna Games, and a secondary component allows users to review their performance in previous Games. To reduce user drop-off, the front end seamlessly leads a user between the phases of a Luna Game within a single page. All opportunities for latency --- between phases of a Game or between Games ---  are reduced as much as possible to encourage repeated play. To increase the probability that a first-time user explores the website beyond the landing page, the website has an option to play as a ``guest.'' The only functional difference between a user that signs up and a guest is that signed up users may log out and log back in, while a guest account expires once the 60-day token is removed from the browser or the user explicitly signs out. Further consideration was given to user experience in the context of the results presented in Chapter 3 of this thesis, which demonstrate that all players must have a clear understanding of their goals during a Luna Game. While it is important that users be able to start playing Luna Games as quickly as possible, they should first be fully aware of the Game's structure and their goals.
+The website's wireframe layout was first prototyped on paper, which allowed for iteration on the skeletal design \citep{rettig1994prototyping}. The centerpiece of the website is the ongoing Luna Games, and a secondary component allows users to review their performance in previous Games. To reduce user drop-off, the front end seamlessly leads a user between the phases of a Luna Game within a single page. All opportunities for latency --- between phases of a Game or between Games ---  are reduced as much as possible to encourage repeated play. To increase the probability that a first-time user explores the website beyond the landing page, the website has an option to play as a ``guest.'' The only functional difference between a user that signs up and a guest is that signed up users may log out and log back in, while a guest account expires once the $60$-day token is removed from the browser or the user explicitly signs out. Further consideration was given to user experience in the context of the results presented in Chapter $3$ of this thesis, which demonstrate that all players must have a clear understanding of their goals during a Luna Game. While it is important that users be able to start playing Luna Games as quickly as possible, they should first be fully aware of the Game's structure and their goals.
 
-Weighing these considerations, the core features of the website are divided into 10 primary states and 4 secondary states. The secondary states include static pages --- the contact page and two extended information pages --- and one profile page that allows a user to review statistics related to her historical performance. The primary states are presented in Figure \ref{statediagram}. They include four states corresponding to the phases of a Luna game, one home state, which contains games as nested states, a landing page, a guest state, a sign up state, a login state, and an information state. Note that first-time users must provide consent and review information about the structure of Luna Games before they are able to play. The eager first-time user is able to reach a new game with only three clicks from the home page, and a returning user can reach games with two clicks and a form submission. This simple state architecture ensures that users are well-informed of the rules and then playing as soon as possible. Screenshots of a typical user experience are depicted in Figure \ref{screenshotpic}.
+Weighing these considerations, the core features of the website are divided into $10$ primary states and $4$ secondary states. The secondary states include static pages --- the contact page and two extended information pages --- and one profile page that allows a user to review statistics related to her historical performance. The primary states are presented in Figure \ref{statediagram}. They include four states corresponding to the phases of a Luna game, one home state, which contains games as nested states, a landing page, a guest state, a sign up state, a login state, and an information state. Note that first-time users must provide consent and review information about the structure of Luna Games before they are able to play. The eager first-time user is able to reach a new game with only three clicks from the home page, and a returning user can reach games with two clicks and a form submission. This simple state architecture ensures that users are well-informed of the rules and then playing as soon as possible. Screenshots of a typical user experience are depicted in Figure \ref{screenshotpic}.
 
 \begin{figure}
 \begin{scriptsize}
@@ -96,27 +96,27 @@ Weighing these considerations, the core features of the website are divided into
 To allow AI researchers to enter machines as players on the Luna Rating System website, I implemented a RESTful API. Machine players must first register separately from human players to receive an API token. This process is currently done by hand, since the system is not yet protected against malicious machine players (e.g. there is no limit on the number of API calls that one player may make). The experience of machine players is very similar to that of humans. The machine may make a request to start a new game, provide questions during the interview phase of an ongoing game, receive questions and provide answers during the response phase, provide a guess during the guess phase, and receive any updates of its own Smarts Rating and total wins. Notably, the guess of a machine is not factored into the Smarts Rating of its opponent. A Python template, which may be used directly or as a blueprint for other languages, is provided for researchers. 
 
 
-This study implemented two simple machine players, both of which were equipped with a fixed set of 5 questions to present during all Interview Phases for consistency. The questions were:
+This study implemented two simple machine players, both of which were equipped with a fixed set of $5$ questions to present during all Interview Phases for consistency. The questions were:
 
 \begin{enumerate}
 \item What color is the sky?
 \item What is the direct object in this sentence: ``The boy threw the ball to the dog''? 
-\item Why is 6 afraid of 7?
+\item Why is $6$ afraid of $7$?
 \item Why does poverty exist?
 \item What is the capital of New York?
 \end{enumerate}
 
-The only distinction between the two machines was their response functions. The first machine, which I refer to as the Gibberish Bot, responds to any question by generating a random string of uppercase characters, digits, and spaces. The length of the response is also randomly selected to be between 1 and 200. This machine is meant to serve as the most basic of controls; if Smarts Ratings are at all meaningful, the Gibberish Bot should have a very low one. The second machine, referred to as the Cleverbot, responds to questions by querying the Cleverbot chatbot, a web-based chatbot that responds to human inputs by outputting previously seen human inputs that are deemed most similar according to a simple surface-level analysis  \citep{carpenter2015cleverbot}. Cleverbot is an ideal second control, as it provides responses that have been written by humans, but does not attempt to understand these questions with any level of sophistication. Thus one would reasonably expect Cleverbot to achieve a Smarts Rating higher than the Gibberish Bot, but lower than most humans. Both bots played 9 games, alternating one at a time against randomly selected human opponents in the first few days of the launch.
+The only distinction between the two machines was their response functions. The first machine, which I refer to as the Gibberish Bot, responds to any question by generating a random string of uppercase characters, digits, and spaces. The length of the response is also randomly selected to be between $1$ and $200$. This machine is meant to serve as the most basic of controls; if Smarts Ratings are at all meaningful, the Gibberish Bot should have a very low one. The second machine, referred to as the Cleverbot, responds to questions by querying the Cleverbot chatbot, a web-based chatbot that responds to human inputs by outputting previously seen human inputs that are deemed most similar according to a simple surface-level analysis  \citep{carpenter2015cleverbot}. Cleverbot is an ideal second control, as it provides responses that have been written by humans, but does not attempt to understand these questions with any level of sophistication. Thus one would reasonably expect Cleverbot to achieve a Smarts Rating higher than the Gibberish Bot, but lower than most humans. Both bots played $9$ games, alternating one at a time against randomly selected human opponents in the first few days of the launch.
 
 \subsection{Launching the Website}
 
-Since this work relies on human participation, the study was submitted for review to the Committee on the Use of Human Subjects in Research at Harvard University. The study qualified for expedited review and received approval on February 18, 2016. The website was immediately launched and publicized, primarily via social media and email. Publicity efforts continued for one week following the launch. The results presented in this chapter were gathered in the two weeks following launch, up until March 3, 2016. 
+Since this work relies on human participation, the study was submitted for review to the Committee on the Use of Human Subjects in Research at Harvard University. The study qualified for expedited review and received approval on February $18$, $2016$. The website was immediately launched and publicized, primarily via social media and email. Publicity efforts continued for one week following the launch. The results presented in this chapter were gathered in the two weeks following launch, up until March $3$, $2016$. 
 
 \section{Results}
 
 \subsection{Traffic Summary}
 
-In the first two weeks of the Luna web implementation, the site attracted 1,293 registered players (including the two machine players). 685 Luna Games were initiated, creating 4,173 unique questions and 4,923 responses. According to Google Analytics, the website earned 2,312 sessions and 2,937 page views. Slightly over 30\% of visitors were returning to the site. 54\% of the visitors came to the site directly, e.g. through clicking a link in their email or typing the URL manually, while the remaining visitors were referred primarily through Facebook and Twitter. The daily number of sessions is plotted in Figure \ref{trafficplot}. As expected, the amount of traffic correlates strongly with publicity efforts, which were concentrated in the first few days of the launch and virtually ceased after one week.
+In the first two weeks of the Luna web implementation, the site attracted $1293$ registered players (including the two machine players). $685$ Luna Games were initiated, creating $4173$ unique questions and $4923$ responses. According to Google Analytics, the website earned $2312$ sessions and $2937$ page views. Slightly over $30$\% of visitors were returning to the site. $54$\% of the visitors came to the site directly, e.g. through clicking a link in their email or typing the URL manually, while the remaining visitors were referred primarily through Facebook and Twitter. The daily number of sessions is plotted in Figure \ref{trafficplot}. As expected, the amount of traffic correlates strongly with publicity efforts, which were concentrated in the first few days of the launch and virtually ceased after one week.
 
 \begin{figure}
 \includegraphics[width=0.95\textwidth]{figures/trafficPlot.png}
@@ -126,25 +126,25 @@ In the first two weeks of the Luna web implementation, the site attracted 1,293 
 
 \subsection{Human Player Summary}
 
-The vast majority of human players registered as guests (1,207), while very few (86) signed up using their emails. One consequence of this discrepancy is that only a small fraction of users were able to receive email updates when it was their turn to play in a Luna Game. In addition, many users appear to have registered as guests and then left the site without submitting interview questions; the overall average number of games played was 0.33, with a median of 0. This is not to say that the guest registration option was ill-advised; it is likely that removing the guest option would have yielded far fewer registrations overall. However, anecdotal evidence suggests that the frequent stalling of Luna Games, due to guests leaving in the middle of a Game, led to frustration among more dedicated players. Among the 220 players who did complete at least one full game, the average Smarts Rating was 68.9, with a median of 74. The full distribution of Smarts Ratings for human players is depicted in Figure \ref{humansmartsratings}. The ratings exhibit a bell curve roughly around the mean with a few low outliers. 
+The vast majority of human players registered as guests ($1207$), while very few ($86$) signed up using their emails. One consequence of this discrepancy is that only a small fraction of users were able to receive email updates when it was their turn to play in a Luna Game. In addition, many users appear to have registered as guests and then left the site without submitting interview questions; the overall average number of games played was $0.33$, with a median of $0$. This is not to say that the guest registration option was ill-advised; it is likely that removing the guest option would have yielded far fewer registrations overall. However, anecdotal evidence suggests that the frequent stalling of Luna Games, due to guests leaving in the middle of a Game, led to frustration among more dedicated players. Among the $220$ players who did complete at least one full game, the average Smarts Rating was $68.9$, with a median of $74$. The full distribution of Smarts Ratings for human players is depicted in Figure \ref{humansmartsratings}. The ratings exhibit a bell curve roughly around the mean with a few low outliers. 
 
 %In Figure \ref{smartsratingscorrelation}, I consider whether Smarts Ratings are correlated with the number of games played or won. 
 
 \begin{figure}
 \includegraphics[width=0.95\textwidth]{figures/ratingDistribution.png}
-\caption{\label{humansmartsratings} Smarts Rating distribution of human players who completed at least one full Luna Game. The ratings exhibit a bell curve roughly around the mean of 68.9 with a few low outliers.}
+\caption{\label{humansmartsratings} Smarts Rating distribution of human players who completed at least one full Luna Game. The ratings exhibit a bell curve roughly around the mean of $68.9$ with a few low outliers.}
 \end{figure}
 
 \subsubsection{Sample Questions and Responses}
 
-I plan to publicly release the complete dataset of questions and responses through the Harvard Dataverse Network after the submission of this thesis. The below 10 examples are meant to be representative of the full dataset in terms of question and response length, form, and content.
+I plan to publicly release the complete dataset of questions and responses through the Harvard Dataverse Network after the submission of this thesis. The below $10$ examples are meant to be representative of the full dataset in terms of question and response length, form, and content.
 
 \begin{enumerate}
 
 \item Q: Is addiction a disease, as is increasingly being claimed, or is the addict at fault for developing their addiction?
 \\ A: a bit of each; people can be psychologically and/or genetically liable to develop addictions, but with sufficient willpower they needn't
 
-\item Q: Apparently, our senses can detect around 11 million pieces of information per second. How much total can a human process of this 11 million? A: 10 of those B: all 11 million C: 25 to 30 of those D: 5 to 7 of those
+\item Q: Apparently, our senses can detect around $11$ million pieces of information per second. How much total can a human process of this $11$ million? A: $10$ of those B: all $11$ million C: $25$ to $30$ of those D: $5$ to $7$ of those
 \\ A: B
 
 \item Q: Compose a limerick involving the word jello.
@@ -160,7 +160,7 @@ I plan to publicly release the complete dataset of questions and responses throu
 \\ A: Overhearing a taxidermist telling a random person how much he loved his job and then asking how their pet was doing
 
 \item Q: Who am I?
-\\ A: Is a question that usually strikes us with the most weight around the age of 50.
+\\ A: Is a question that usually strikes us with the most weight around the age of $50$.
 
 \item Q: Should Supreme Court positions have term limits?
 \\ A: don't understand the question. is this about USA? this game is worldwide.
@@ -169,12 +169,12 @@ I plan to publicly release the complete dataset of questions and responses throu
 \\ A: I am
 
 \item Q: Describe an algorithm for walking
-\\ A: Brain signal -> knee. $\^$ knee. Increment 37 degrees. +1.5 feet forward. Repeat for other knee.
+\\ A: Brain signal -> knee. $\^$ knee. Increment $37$ degrees. + $1.5$ feet forward. Repeat for other knee.
 \end{enumerate}
 
 \subsection{Machine Player Summary}
 
-After 9 games each, the Gibberish Bot achieved a Smarts Rating of 6.4, and Cleverbot arrived at a Smarts Rating of 40.4. All opponents but one guessed a Smarts Rating of 1 for the Gibberish Bot; the remaining opponent guessed 50. Guesses of Cleverbot's Smarts Rating ranged from 5 to 88. To illustrate the typical behavior of each of these machines during the Response phase, I provide representative samples below.
+After $9$ games each, the Gibberish Bot achieved a Smarts Rating of $6.4$, and Cleverbot arrived at a Smarts Rating of $40.4$. All opponents but one guessed a Smarts Rating of 1 for the Gibberish Bot; the remaining opponent guessed $50$. Guesses of Cleverbot's Smarts Rating ranged from $5$ to $88$. To illustrate the typical behavior of each of these machines during the Response phase, I provide representative samples below.
 
 \subsubsection{Gibberish Bot Response Phase Sample}
 \begin{enumerate}
@@ -184,7 +184,7 @@ After 9 games each, the Gibberish Bot achieved a Smarts Rating of 6.4, and Cleve
 \item Q: Will your answer to this question be wrong?
 \\A: MGKGJNYJYHP4XM2J35TQ BF4GNNERA77Z20ZVULH
 
-\item Q: Is the space L\^2 complete?
+\item Q: Is the space L$\^2$ complete?
 \\A: DZTYWUKXE4D13B58A823VA8 22ZLZ19FQAGPEMQ
 
 \item Q: What is a contradiction to the CAPM model of financial markets?
@@ -197,14 +197,14 @@ Guess: 1
 
 \subsubsection{Cleverbot Response Phase Sample}
 \begin{enumerate}
-\item Q: What is your favorite book and please describe it in 3 words.
+\item Q: What is your favorite book and please describe it in $3$ words.
 \\A: Howl by Allen Ginsberg.
 
 \item Q: What's the best thing you did today?
 \\A: The moment that I fell in love was the best thing I have seen. You?
 
-\item Q: What is your favorite number from 1 to 10 and why?
-\\A: Number 13 is my favorite number.
+\item Q: What is your favorite number from $1$ to $10$ and why?
+\\A: Number $13$ is my favorite number.
 
 \item Q: What is the best machine ever invented?
 \\A: Back to the Future is the best movie ever.
@@ -212,15 +212,15 @@ Guess: 1
 \item Q: What is your biggest accomplishment of the last year?
 \\A: All the time I HAVEN'T spent talking to you!
 \end{enumerate}
-Guess: 40
+Guess: $40$
 
 \subsection{Game Summary}
 
-Among the 685 initiated Luna Games, 292 were followed through to the final phase by both players. To see if there is any obvious correlation between the length of responses and the subsequent guess of the Smarts Rating of the responder, I created a scatterplot of response length and subsequent guess (Figure \ref{responseLengthGuess}). The relationship between response length and guess gives a Pearson's $r$ of 0.179, suggesting a weak positive correlation. One interpretation of this result is that players who put more effort into their responses are rewarded with higher Smarts Ratings.
+Among the $685$ initiated Luna Games, $292$ were followed through to the final phase by both players. To see if there is any obvious correlation between the length of responses and the subsequent guess of the Smarts Rating of the responder, I created a scatterplot of response length and subsequent guess (Figure \ref{responseLengthGuess}). The relationship between response length and guess gives a Pearson's $r$ of $0.179$, suggesting a weak positive correlation. One interpretation of this result is that players who put more effort into their responses are rewarded with higher Smarts Ratings.
 
 \begin{figure}
 \includegraphics[width=0.95\textwidth]{figures/responseVsGuesses.png}
-\caption{\label{responseLengthGuess} Relationship between response length and subsequent guess of the responder's Smarts Rating. Pearson's $r$ is 0.179, suggesting a weak positive correlation.}
+\caption{\label{responseLengthGuess} Relationship between response length and subsequent guess of the responder's Smarts Rating. Pearson's $r$ is $0.179$, suggesting a weak positive correlation.}
 \end{figure}
 
 It is impossible to assess whether Smarts Ratings are accurate without presuming some ground truth about intelligence. However, one encouraging sign would be the convergence of a player's Smarts Rating as she continues to play games. In Figure \ref{smartRatingStds}, I plot the standard deviations of Smarts Ratings per player as a function of the number of games each has completed. No such convergence is yet observed, likely indicating that more playing time is necessary for the system to reach an equilibrium in which most players hold a shared understanding of Smarts Ratings. 
@@ -232,7 +232,7 @@ It is impossible to assess whether Smarts Ratings are accurate without presuming
 
 \section{Analysis}
 
-The first goal of this chapter --- to demonstrate that a straightforward web implementation of the Luna Rating System can draw players and sustain games --- is readily reached. Given the relatively minor publicity efforts, unaided by any sort of financial expenditures, the substantial traffic to the website within the short time window is very encouraging. The Smarts Ratings reached by both human and machine players are also auspicious. The bell curve observed for humans is consistent with the distribution of IQ, for example. Moreover, the Smarts Ratings of the machines --- 6.4 for the Gibberish Bot and 40.4 for Cleverbot --- indicate that the controls were relatively successful. As expected, the Gibberish Bot reached a much lower rating than Cleverbot, and Cleverbot remained significantly lower than the majority of human players. These results corroborate the semantic value of Smarts Ratings and suggest that human players understand the basic notion behind the ratings.
+The first goal of this chapter --- to demonstrate that a straightforward web implementation of the Luna Rating System can draw players and sustain games --- is readily reached. Given the relatively minor publicity efforts, unaided by any sort of financial expenditures, the substantial traffic to the website within the short time window is very encouraging. The Smarts Ratings reached by both human and machine players are also auspicious. The bell curve observed for humans is consistent with the distribution of IQ, for example. Moreover, the Smarts Ratings of the machines --- $6.4$ for the Gibberish Bot and $40.4$ for Cleverbot --- indicate that the controls were relatively successful. As expected, the Gibberish Bot reached a much lower rating than Cleverbot, and Cleverbot remained significantly lower than the majority of human players. These results corroborate the semantic value of Smarts Ratings and suggest that human players understand the basic notion behind the ratings.
 
 While the machine Smarts Ratings align with expectations, the extent to which ratings can meaningfully distinguish between human players is less clear. The weak correlation between response length and subsequent guess can be interpreted in two ways. Optimistically, one would expect that players who are more dedicated to demonstrating intelligence might write longer responses, thus deserving higher Smarts Ratings. Pessimistically, one could argue that Smarts Ratings are just a measure of response length, rather than intelligence. Future work could distinguish between these interpretations by enforcing a stricter limit on response lengths, or by attempting to correlate Smarts Ratings with other metrics of intelligence like IQ. Additionally, the lack of convergence of Smarts Ratings suggests that more time is needed for the system to reach an equilibrium. Once such convergence is observed, the discriminative power of Smarts Ratings will be more clear.
 
@@ -240,7 +240,7 @@ The qualitative results presented in this chapter, consisting mainly of the ques
 
 \section{Discussion}
 
-The results reported in this chapter demonstrate the promising potential of the Luna Rating System as an active and informative benchmark for AI. The study also highlights critical design considerations for future implementations. Perhaps the most confounding aspect of this web implementation was the prevalence of stalled Luna Games. A game stalls when one of the players leaves the website in the middle of gameplay and does not return. The remaining player is left waiting until the game expires due to inactivity (which currently occurs after 3 days). While waiting players are welcome to start simultaneous games, it is likely discouraging to see a backlog of unfinished games; the incentive to start a new game diminishes as the expectation that games will be finished decreases. If a player registers with an email address, the likelihood that she will return to games improves, as the system automatically sends an email to notify her when it is her turn to play. Thus a central objective in future design should be to obtain valid email addresses. Other ways to further persuade players to stay and play should also be considered.
+The results reported in this chapter demonstrate the promising potential of the Luna Rating System as an active and informative benchmark for AI. The study also highlights critical design considerations for future implementations. Perhaps the most confounding aspect of this web implementation was the prevalence of stalled Luna Games. A game stalls when one of the players leaves the website in the middle of gameplay and does not return. The remaining player is left waiting until the game expires due to inactivity (which currently occurs after $3$ days). While waiting players are welcome to start simultaneous games, it is likely discouraging to see a backlog of unfinished games; the incentive to start a new game diminishes as the expectation that games will be finished decreases. If a player registers with an email address, the likelihood that she will return to games improves, as the system automatically sends an email to notify her when it is her turn to play. Thus a central objective in future design should be to obtain valid email addresses. Other ways to further persuade players to stay and play should also be considered.
 
 The primary question left unanswered in this chapter is: what levels of participation are required for Smarts Ratings to reach an equilibrium? There are two dimensions of participations that likely affect this convergence: total number of players, and duration of play. I suspect that increasing the duration of play, i.e. the number of games played per player, is more important than increasing the number of players. An individual player develops an understanding of Smarts Ratings over time as she finishes games and true Smarts Ratings are revealed. The majority of players in this first web implementation have finished no games at all, meaning that they have no empirical basis from which to infer ratings. It is quite possible that even a much smaller cohort of players, each of whom plays several games, would reach a Smarts Rating equilibrium. Future efforts should be focused on achieving this equilibrium; the informativeness of the Luna Rating System depends on the precision of Smarts Ratings.
 

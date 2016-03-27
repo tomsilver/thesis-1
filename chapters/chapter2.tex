@@ -13,19 +13,19 @@ As a player with a high Smarts Rating, why not ``play dumb''? This strategy woul
 
 In designing the Luna Game, I sought to impose as few constraints as possible. The Game is meant to be a microcosm of the organic process for defining intelligence. Humans evaluate each other's intelligences through a series of questions and answers, often in the form of a written exam, but also informally through everyday conversations. The most natural notion of an individual's intelligence arises from the consensus of the people who perform these evaluations. A player's Smarts Rating is meant to reflect this natural notion; it is an aggregate of evaluations carried out by other players. To define the scope of an evaluation, I impose only those constraints necessary to motivate honest and repeated play.
 
-A session of the Luna Game consists of three phases: the Interview Phase, the Response Phase, and the Guess Phase. During the Interview Phase, each player creates a set of 5 questions to pose to the opponent. In the Response Phase, each player responds to the other's questions. Finally, in the Guess Phase, each player receives responses back from her opponent, and must use the responses to guess her opponent's Smarts Rating. I describe each of these phases in detail throughout the rest of this chapter and illustrate the game through examples of play.
+A session of the Luna Game consists of three phases: the Interview Phase, the Response Phase, and the Guess Phase. During the Interview Phase, each player creates a set of five questions to pose to the opponent. In the Response Phase, each player responds to the other's questions. Finally, in the Guess Phase, each player receives responses back from her opponent, and must use the responses to guess her opponent's Smarts Rating. I describe each of these phases in detail throughout the rest of this chapter and illustrate the game through examples of play.
 
 \section{Interview Phase}
 
-A Luna Game begins with the Interview Phase. During this phase, each player prepares a set of 5 free-form questions to be given to the other player. The number of questions represents a tradeoff between the time required to complete the phase and the difficulty of the guessing task. With more questions, each player would need more time to construct the questions, increasing the likelihood that they will quit the game and leave the system. With fewer questions, construction time could be shortened, but the informativeness of the subsequent responses would suffer, and the Smarts Ratings would ultimately be less meaningful. I chose the number 5 to optimize this tradeoff, but the number may be adjusted in future iterations of the system. In a similar practical vein, I insist that questions be constructed in batch, rather than allowing for sequential question-response. Since the game is played online, allowing for back and forth would increase the length of each game and significantly decrease the probability that a game gets finished.
+A Luna Game begins with the Interview Phase. During this phase, each player prepares a set of five free-form questions to be given to the other player. The number of questions represents a tradeoff between the time required to complete the phase and the difficulty of the guessing task. With more questions, each player would need more time to construct the questions, increasing the likelihood that they will quit the game and leave the system. With fewer questions, construction time could be shortened, but the informativeness of the subsequent responses would suffer, and the Smarts Ratings would ultimately be less meaningful. I chose the number five to optimize this tradeoff, but the number may be adjusted in future iterations of the system. In a similar practical vein, I insist that questions be constructed in batch, rather than allowing for sequential question-response. Since the game is played online, allowing for back and forth would increase the length of each game and significantly decrease the probability that a game gets finished.
 
-The other major consideration in the design of the Interview Phase is the form of the questions. The only constraint I impose is a limit of 5000 characters per question. I do not insist that questions be actual questions, nor that they be in any particular language, nor that they expect a particular form of response. In natural language terms, the questions are of open domain, since I do not restrict the content of questions. I recognize that in practice, players may opt for yes-or-no or multiple choice questions, which could simplify the task of learning to guess ratings. Players may also limit the domain of their questions, since general form questions may be too difficult for current AI, so general questions could not meaningfully differentiate between them. Nonetheless, I leave the choice of question topic and form to the players themselves. I anticipate that players will find the optimal question types better than I as the game designer could, and that the question types will naturally evolve in correspondence with the evolution of the AI players.
+The other major consideration in the design of the Interview Phase is the form of the questions. The only constraint I impose is a limit of $5000$ characters per question. I do not insist that questions be actual questions, nor that they be in any particular language, nor that they expect a particular form of response. In natural language terms, the questions are of open domain, since I do not restrict the content of questions. I recognize that in practice, players may opt for yes-or-no or multiple choice questions, which could simplify the task of learning to guess ratings. Players may also limit the domain of their questions, since general form questions may be too difficult for current AI, so general questions could not meaningfully differentiate between them. Nonetheless, I leave the choice of question topic and form to the players themselves. I anticipate that players will find the optimal question types better than I as the game designer could, and that the question types will naturally evolve in correspondence with the evolution of the AI players.
 
 \subsection{Instructions}
 
 The following instructions are presented during the Interview Phase.
 \begin{center}
-\textit{You are now in the Interview Phase. Please enter a list of 5 questions for the other player. Keep in mind the following strategic hints:}
+\textit{You are now in the Interview Phase. Please enter a list of five questions for the other player. Keep in mind the following strategic hints:}
 
 \begin{itemize}
 \item \textit{Your questions should be as informative as possible for guessing the other player's Smarts Rating.}
@@ -42,7 +42,7 @@ In preparing questions, a player knows nothing about her opponent. She must prep
 
 \subsection{Examples}
 
-Below is an example of a question set. I choose questions from the web-based implementation of LRS described in Chapter 6 to illustrate the range of possible question types and to demonstrate appropriate levels of difficulty. Early questions are aimed at differentiating between naive machines, while later questions are directed towards advanced human players. Each question is designed to induce a response that will reveal the intelligence of the opponent.
+Below is an example of a question set. I choose questions from the web-based implementation of LRS described in Chapter $6$ to illustrate the range of possible question types and to demonstrate appropriate levels of difficulty. Early questions are aimed at differentiating between naive machines, while later questions are directed towards advanced human players. Each question is designed to induce a response that will reveal the intelligence of the opponent.
 
 \begin{enumerate}
 \item Do you like games?
@@ -54,7 +54,7 @@ Below is an example of a question set. I choose questions from the web-based imp
 
 \section{Response Phase}
 
-The Response Phase is a player's opportunity to convince her opponent that she is intelligent. Questions are received as soon as both players have finished the Interview Phase. Each player must then respond in free form to all 5 questions. Responses are not returned until both players have finished answering all questions. Like questions in the Interview Phase, responses are unconstrained in form, and only limited in length to 5000 characters each. A player is motivated by the prospect of an increase in Smarts Rating to respond to the questions thoroughly and to the best of her ability.
+The Response Phase is a player's opportunity to convince her opponent that she is intelligent. Questions are received as soon as both players have finished the Interview Phase. Each player must then respond in free form to all five questions. Responses are not returned until both players have finished answering all questions. Like questions in the Interview Phase, responses are unconstrained in form, and only limited in length to $5000$ characters each. A player is motivated by the prospect of an increase in Smarts Rating to respond to the questions thoroughly and to the best of her ability.
 
 \subsection{Instructions}
 
@@ -70,7 +70,7 @@ The following instructions are presented during the Response Phase.
 
 \subsection{Examples}
 
-The responses below are also taken from the web-based implementation of LRS described in Chapter 6.
+The responses below are also taken from the web-based implementation of LRS described in Chapter $6$.
 
 \begin{enumerate}
 \item Q: Do you like games? \\
@@ -89,7 +89,7 @@ A: Ugh, this is a difficult one. It would make guessing password easier maybe, b
 
 After both players have responded to each other's questions, their responses are returned for evaluation. Each player then must formulate a guess of the other's Smarts Rating based on these responses. In practice, the player might also attempt to take into account the questions provided by the opponent, but since questions may be generated automatically, it is advisable to focus on the opponent's responses. The winner of the Luna Game is the player whose guess is closest to the actual Smarts Rating of her opponent.
 
-A competitive player may consider guessing the lowest possible rating, knowing that the game will be lost, but the opponent's Smarts Rating will decrease as a result of the guess. However, this strategy offers no real benefit to the player, since Smarts Ratings are not rankings; the player's Smarts Rating will not improve as a result of the opponent's Smarts Rating suffering. (Nonetheless, I analyze the system-level effects of this strategy in Chapter 3.) Thus the only rational strategy for guessing is to attempt to guess as close as possible to the actual Smarts Rating of the opponent.
+A competitive player may consider guessing the lowest possible rating, knowing that the game will be lost, but the opponent's Smarts Rating will decrease as a result of the guess. However, this strategy offers no real benefit to the player, since Smarts Ratings are not rankings; the player's Smarts Rating will not improve as a result of the opponent's Smarts Rating suffering. (Nonetheless, I analyze the system-level effects of this strategy in Chapter $3$.) Thus the only rational strategy for guessing is to attempt to guess as close as possible to the actual Smarts Rating of the opponent.
 
 \subsection{Instructions}
 
@@ -108,11 +108,11 @@ Below is an example of feedback at the end of a Luna Game.
 \begin{center}
 \textit{Your Luna Game is complete! Below are the results.}\\
 \textit{Game Outcome: You won!}\\
-\textit{Your New Smarts Rating: 78}\\
-\textit{Actual Other Player Smart Rating: 84 (You guessed 81)}\\
-\textit{Other Player's Guess of Your Rating: 91 (Your rating was 75)}
+\textit{Your New Smarts Rating: $78$}\\
+\textit{Actual Other Player Smart Rating: $84$ (You guessed $81$)}\\
+\textit{Other Player's Guess of Your Rating: $91$ (Your rating was $75$)}
 \end{center}
 
 \subsection{Conclusion of a Player's First Luna Game}
 
-New players do not have Smarts Ratings until the end of their first game, at which point they are assigned the guess of their first opponent. The game is counted as an automatic win for the opponent, but not as a loss for the new player. This process is to avoid the possibility of the Smarts Rating equilibrium collapsing into a constant (see Chapter 3).
+New players do not have Smarts Ratings until the end of their first game, at which point they are assigned the guess of their first opponent. The game is counted as an automatic win for the opponent, but not as a loss for the new player. This process is to avoid the possibility of the Smarts Rating equilibrium collapsing into a constant (see Chapter $3$).
