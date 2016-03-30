@@ -22,60 +22,7 @@ The website's wireframe layout was first prototyped on paper, which allowed for 
 Weighing these considerations, the core features of the website are divided into $10$ primary states and $4$ secondary states. The secondary states include static pages --- the contact page and two extended information pages --- and one profile page that allows a user to review statistics related to her historical performance. The primary states are presented in Figure \ref{statediagram}. They include four states corresponding to the phases of a Luna Game, one home state, which contains games as nested states, a landing page, a guest state, a sign up state, a login state, and an information state. Note that first-time users must provide consent and review information about the structure of Luna Games before they are able to play. The eager first-time user is able to reach a new game with only three clicks from the home page, and a returning user can reach games with two clicks and a form submission. This simple state architecture ensures that users are well-informed of the rules and then playing as soon as possible. Screenshots of a typical user experience are depicted in Figure \ref{screenshotpic}.
 
 \begin{figure}
-\begin{scriptsize}
-\begin{center}
-\begin{tikzpicture}[scale=0.2]
-\tikzstyle{every node}+=[inner sep=0pt]
-\draw [black] (38.9,-3.4) circle (3);
-\draw (38.9,-3.4) node {$landing$};
-\draw [black] (25,-14.6) circle (3);
-\draw (25,-14.6) node {$guest$};
-\draw [black] (38.9,-14.6) circle (3);
-\draw (38.9,-14.6) node {$signup$};
-\draw [black] (52.6,-19.4) circle (3);
-\draw (52.6,-19.4) node {$login$};
-\draw [black] (38.9,-31.2) circle (3);
-\draw (38.9,-31.2) node {$home$};
-\draw [black] (19.7,-40.7) circle (3);
-\draw (19.7,-40.7) node {$interview$};
-\draw [black] (32.6,-40.7) circle (3);
-\draw (32.6,-40.7) node {$response$};
-\draw [black] (45.3,-40.7) circle (3);
-\draw (45.3,-40.7) node {$guess$};
-\draw [black] (59,-40.7) circle (3);
-\draw (59,-40.7) node {$final$};
-\draw [black] (31.9,-22.5) circle (3);
-\draw (31.9,-22.5) node {$info$};
-\draw [black] (38.9,-6.4) -- (38.9,-11.6);
-\fill [black] (38.9,-11.6) -- (39.4,-10.8) -- (38.4,-10.8);
-\draw (38.4,-9) node [left] {$consent$};
-\draw [black] (36.56,-5.28) -- (27.34,-12.72);
-\fill [black] (27.34,-12.72) -- (28.27,-12.61) -- (27.65,-11.83);
-\draw (28.39,-8.51) node [above] {$consent$};
-\draw [black] (40.85,-5.68) -- (50.65,-17.12);
-\fill [black] (50.65,-17.12) -- (50.51,-16.19) -- (49.75,-16.84);
-\draw [black] (50.33,-21.36) -- (41.17,-29.24);
-\fill [black] (41.17,-29.24) -- (42.11,-29.1) -- (41.45,-28.34);
-\draw [black] (36.21,-32.53) -- (22.39,-39.37);
-\fill [black] (22.39,-39.37) -- (23.33,-39.46) -- (22.88,-38.57);
-\draw (24.76,-35.43) node [above] {$new\mbox{ }game$};
-\draw [black] (22.7,-40.7) -- (29.6,-40.7);
-\fill [black] (29.6,-40.7) -- (28.8,-40.2) -- (28.8,-41.2);
-\draw [black] (35.6,-40.7) -- (42.3,-40.7);
-\fill [black] (42.3,-40.7) -- (41.5,-40.2) -- (41.5,-41.2);
-\draw [black] (48.3,-40.7) -- (56,-40.7);
-\fill [black] (56,-40.7) -- (55.2,-40.2) -- (55.2,-41.2);
-\draw [black] (56.29,-39.42) -- (41.61,-32.48);
-\fill [black] (41.61,-32.48) -- (42.12,-33.28) -- (42.55,-32.37);
-\draw [black] (33.78,-24.84) -- (37.02,-28.86);
-\fill [black] (37.02,-28.86) -- (36.91,-27.93) -- (36.13,-28.55);
-\draw [black] (26.97,-16.86) -- (29.93,-20.24);
-\fill [black] (29.93,-20.24) -- (29.78,-19.31) -- (29.02,-19.97);
-\draw [black] (36.91,-16.85) -- (33.89,-20.25);
-\fill [black] (33.89,-20.25) -- (34.79,-19.99) -- (34.05,-19.32);
-\end{tikzpicture}
-\end{center}
-\end{scriptsize}
+\includegraphics[width=0.95\textwidth]{figures/schematicflow.png}
 \caption{Schematic diagram depicting the primary states of the Luna Rating System web interface. Nodes represent website states and edges indicate how users typically navigate between states. A first-time user arrives at the \textit{landing} state. Upon providing consent, the user may play as a \textit{guest} or \textit{sign up}, both which lead to the \textit{info} state. The info state explains the Luna Game and then directs users to the \textit{home} state. The user can then create a new Luna Game, launching the \textit{interview} state. As the user progresses through the Luna Game, she transitions from interview to \textit{response}, to \textit{guess}, and to \textit{final}. They then return to the home state to start another game. Returning signed up users may \textit{login} from the landing state to reach the home state.}
 \label{statediagram}
 \end{figure}
@@ -126,7 +73,7 @@ In the first two weeks of the Luna web implementation, the site attracted $1293$
 
 \subsection{Human Player Summary}
 
-The vast majority of human players registered as guests ($1207$), while very few ($86$) signed up using their emails. One consequence of this discrepancy is that only a small fraction of users were able to receive email updates when it was their turn to play in a Luna Game. In addition, many users appear to have registered as guests and then left the site without submitting interview questions; the overall average number of games played was $0.33$, with a median of $0$. This is not to say that the guest registration option was ill-advised; it is likely that removing the guest option would have yielded far fewer registrations overall. However, anecdotal evidence suggests that the frequent stalling of Luna Games, due to guests leaving in the middle of a Game, led to frustration among more dedicated players. Among the $220$ players who did complete at least one full game, the average Smarts Rating was $68.9$, with a median of $74$. The full distribution of Smarts Ratings for human players is depicted in Figure \ref{humansmartsratings}. The ratings exhibit a bell curve roughly around the mean with a few low outliers. 
+The vast majority of human players ($1207$) registered as guests, while very few ($86$) signed up using their emails. One consequence of this discrepancy is that only a small fraction of users were able to receive email updates when it was their turn to play in a Luna Game. In addition, many users appear to have registered as guests and then left the site without submitting interview questions; the overall average number of games played was $0.33$, with a median of $0$. This is not to say that the guest registration option was ill-advised; it is likely that removing the guest option would have yielded far fewer registrations overall. However, anecdotal evidence suggests that the frequent stalling of Luna Games, due to guests leaving in the middle of a Game, led to frustration among more dedicated players. Among the $220$ players who did complete at least one full game, the average Smarts Rating was $68.9$, with a median of $74$. The full distribution of Smarts Ratings for human players is depicted in Figure \ref{humansmartsratings}. The ratings exhibit a bell curve roughly around the mean with a few low outliers. 
 
 %In Figure \ref{smartsratingscorrelation}, I consider whether Smarts Ratings are correlated with the number of games played or won. 
 
