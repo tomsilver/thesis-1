@@ -22,7 +22,7 @@ If a player withholds a strong response in favor of a weak response, the withhel
 
 \subsection{Definitions and Notation}
 
-Let $P$ be the set of all players in the LRS. Let $SR \subseteq \mathbb{R}^+$ be the domain of Smarts Ratings. The definitions of Reported Guess and Smarts Rating are mutually dependent.
+Let $P$ be the set of all players in the LRS. Let $\mathcal{P}$ be a random variable that assumes values over $P$ with uniform probability. Let $SR \subseteq \mathbb{R}^+$ be the domain of Smarts Ratings. The definitions of Reported Guess and Smarts Rating are mutually dependent.
 
 \theoremstyle{definition}
 \begin{definition}{Reported Guess}\\
@@ -33,10 +33,10 @@ For players $p, p' \in P$, player $p$ has a \textit{Reported Guess} of the Smart
 
 \theoremstyle{definition}
 \begin{definition}{Smarts Rating}\\
-The \textit{Smarts Rating} of a player $p \in P$ is the expected Reported Guess of an opponent. This is written as $S(p) \triangleq E_{p' \in P}[G(p', p)]$.
+The \textit{Smarts Rating} of a player $p \in P$ is the expected Reported Guess of an opponent. This is written as $S(p) \triangleq E[G(\mathcal{P}, p)]$.
 \end{definition}
 
-\noindent The given definition of Smarts Ratings is an expectation rather than a quantity that depends on the number of Games played. This definition is expedient for theoretically evaluating the discrepancy between Smarts Ratings and intelligence. Later I provide simulations that probe the role of time in this discrepancy.
+\noindent The given definition of Smarts Ratings is an expectation rather than a quantity that depends on the number of Games played. This definition is expedient for theoretically evaluating the discrepancy between Smarts Ratings and intelligence. Later I provide simulations that probe the role of time in this discrepancy. Additionally, note that this definition does not preclude a player from playing herself, which is of course impossible in practice. Incorporating this observation into the definition would have no effect on results and would only muddle the analysis, hence the exclusion.
 
 \theoremstyle{definition}
 \begin{definition}{Actual Guess}\\
@@ -47,7 +47,7 @@ For players $p, p' \in P$, player $p$ has an \textit{Actual Guess} of the Smarts
 
 \theoremstyle{definition}
 \begin{definition}{Intelligence}\\
-The \textit{intelligence} of a player $p \in P$ is the expected Actual Guess of an opponent. This is written as $I(p) \triangleq E_{p' \in P}[G^*(p', p)]$.
+The \textit{intelligence} of a player $p \in P$ is the expected Actual Guess of an opponent. This is written as $I(p) \triangleq E[G^*(\mathcal{P}, p)]$.
 \end{definition}
 
 \section{Theoretical Effects of Strategies on Smarts Rating Validity}
@@ -74,14 +74,14 @@ Suppose that a player ignores Luna Game outcomes and strategizes to maximize her
 
 I assess the net impact of this Minimum Guessing strategy on LRS validity from two angles. First, to evaluate the likelihood that the strategy is adopted, I quantify the expected benefit of adopting this strategy for an individual player. I show that as a function of the number of players in the system, this benefit is so small that a player concerned only marginally with winning Luna Games will be better off playing honestly. Second, in the event that a player does adopt this strategy, I quantify the error that Minimum Guessing introduces to Smarts Ratings as a function of the number of players that adopt it.
 
-Consider the Minimum Guessing strategy from the perspective of an individual player. If the player truly attaches zero value to a Luna Game win, then always guessing 0 makes sense. But if the player cares even a marginal amount about wins, the personal benefit from guessing 0 is unlikely to outweigh the cost. Let $p \in P$ be a player deciding between honesty and Minimum Guessing. Note that the Smarts Rating of $S(p)$ will be unchanged regardless, since $p$'s strategy choice will not affect the Guessing strategies of opponents. Let $s_1$ the mean Smarts Rating if $p$ Guesses honestly, where $N$ is the number of players in the system. We can express $s_1$ as
+Consider the Minimum Guessing strategy from the perspective of an individual player. If the player truly attaches zero value to a Luna Game win, then always guessing $0$ makes sense. But if the player cares even a marginal amount about wins, the personal benefit from guessing $0$ is unlikely to outweigh the cost. Let $p \in P$ be a player deciding between honesty and Minimum Guessing. Note that the Smarts Rating of $S(p)$ will be unchanged regardless, since $p$'s strategy choice will not affect the Guessing strategies of opponents. Let $s_1$ the mean Smarts Rating if $p$ Guesses honestly, where $N$ is the number of players in the system. We can express $s_1$ as
 \begin{center}
 \begin{math}
 s_1 = \frac{1}{N}(\sum_{p' \in P}S(p')) = \frac{1}{N^2}(\sum_{p' \in P}(\sum_{p'' \in P}G(p'', p')))
 \end{math}
 \end{center}
 
-\noindent Let $s_2$ be the mean Smarts Rating if $p$ instead uses the Minimum Guessing strategy. In this case, each Guess $G(p, p')$ in the expression of $s_0$ will change to $0$. Therefore the new mean Smarts Rating in this scenario will be 
+\noindent Let $s_2$ be the mean Smarts Rating if $p$ instead uses the Minimum Guessing strategy. In this case, each Guess $G(p, p')$ in the expression of $s_1$ will change to $0$. Therefore the new mean Smarts Rating in this scenario will be 
 \begin{center}
 \begin{math}
 s_2 = s_1 - \frac{1}{N^2}(\sum_{p' \in P} G(p, p'))
@@ -90,7 +90,7 @@ s_2 = s_1 - \frac{1}{N^2}(\sum_{p' \in P} G(p, p'))
 The relative benefit to the $p$ in choosing the Minimum Guessing strategy is thus \\
 $\frac{1}{N^2}(\sum_{p' \in P} G(p, p'))$. For perspective, suppose that $p$ has Actual Guesses that are perfect, i.e. they match the Smarts Ratings of other players. Then the relative benefit is $\frac{1}{N}$ of the average Smarts Ratings of all players in the system.  As the number of players in the LRS increases, this change quickly becomes negligible. Thus any rational player with even the slightest desire to avoid losing every Luna Game will likely abstain from the Minimum Guessing strategy.
 
-While the Minimum Guessing strategy is evidently subpar for players caring at all about winning, there may still be players who choose to adopt it. Suppose that there are $K$ such players, indexed $p_1, p_2, ..., p_K \in P$. I quantify the expected error introduced to the Smarts Rating of another player $p \in P$ as a result of these $K$ rogue players. Let $p \in P$. The ideal Smarts Rating, i.e. the intelligence, is given by
+While the Minimum Guessing strategy is evidently subpar for players caring at all about winning, there may still be players who choose to adopt it. Suppose that there are $K$ such players, indexed $p_1, p_2, ..., p_K \in P$, with all other players adhering to Honest Guessing. I quantify the expected error introduced to the Smarts Rating of another player $p \in P$ as a result of these $K$ rogue players. Let $p \in P$. The most accurate Smarts Rating, i.e. the intelligence, is given by
 \begin{center}
 \begin{math}
 I(p) = \frac{1}{N}(\sum_{p' \in P}(G^*(p', p)))
@@ -138,7 +138,7 @@ An experiment runs for $T$ time steps. At each time step, two players are random
 
 \subsubsection{Baseline}
 
-Since Smarts Ratings and intelligences are both on a scale from $0$ to $100$, one baseline for the $L_1$ distance between the two is achieved by Reported Guessing a constant value. Doing so would result in an expected error of $50$. Another baseline is given by the expected distance between two uniformly randomly selected points from the domain of Smarts Ratings. For two random variables $A_1$ and $A_2$ drawn independently from the uniform distribution over $[0, 100]$, let $B$ be a random variable given by $B = max(A_1, A_2)$, and let $C$ be a random variable given by $C = min(A_1, A_2)$. By symmetry, $E[100 - C] = E[B]$. Furthermore, the expected value of $B$ is half that of $C$ (this can be derived by conditioning on the values of $A_1$ and $A_2$), so $2E[B] = E[C] \implies E[C-B] = E[B]$. Now note that $B + (C-B) + (100-C) = 100$, so $3E[C-B] = 100 \implies E[C-B] = \frac{100}{3}$. Thus $33.33$ is one appropriate baseline for the $L_1$ error of Smarts Ratings.
+Since Smarts Ratings and intelligences are both on a scale from $0$ to $100$, one baseline for the $L_1$ distance between the two is achieved by assuming that all players give the same constant Reported Guess, such as $0$ (which would happen if all players use Minimum Guessing). Doing so would result in an expected error of $50$. Another baseline is given by the expected distance between two uniformly randomly selected points from the domain of Smarts Ratings. For two random variables $A_1$ and $A_2$ drawn independently from the uniform distribution over $[0, 100]$, let $B$ be a random variable given by $B = max(A_1, A_2)$, and let $C$ be a random variable given by $C = min(A_1, A_2)$. By symmetry, $E[100 - C] = E[B]$. Furthermore, the expected value of $B$ is half that of $C$ (this can be derived by conditioning on the values of $A_1$ and $A_2$), so $2E[B] = E[C] \implies E[C-B] = E[B]$. Now note that $B + (C-B) + (100-C) = 100$, so $3E[C-B] = 100 \implies E[C-B] = \frac{100}{3}$. Thus $33.33$ is one appropriate baseline for the $L_1$ error of Smarts Ratings.
 
 A third baseline can be derived by assuming that all players give fixed random Reported Guesses (independent from Actual Guesses). In this case, all Smarts Ratings will approach the expected value, and the error will be the expected difference from the expected value to a randomly drawn Smarts Rating. In terms of the parameters used in this simulation, Figure \ref{fig:RandomGuess} shows that mean error starts around the $33.33$ baseline and approaches $25$, while maximum error stays above $50$. 
 
@@ -169,7 +169,7 @@ Honest players give Reported Guesses that are equivalent to their Actual Guesses
 
 If a player cares only about maximizing relative Smarts Ratings and neglects Luna Game outcomes, that player will likely give Reported Guesses of $0$ for all opponents. If all players use this Minimum Guessing strategy, Smarts Ratings will immediately collapse to $0$. More generally, the error introduced by Minimum Guessing depends linearly on the number of players using this strategy. Figure \ref{fig:MinimumGuess} confirms this result suggested by the theory. Mean $L_1$ error ranges from half the total range of Smarts Ratings to $0$.
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centerline{%
 \includegraphics[width=0.5\textwidth]{figures/robustness/Minimum_Guessing31.png}%
 \includegraphics[width=0.5\textwidth] {figures/robustness/Minimum_Guessing32.png}%
@@ -182,7 +182,7 @@ If a player cares only about maximizing relative Smarts Ratings and neglects Lun
 
 If the distribution of current Smarts Ratings is known at all times to all players, some players may try to take advantage of the distribution to formulate their Guesses. A naive approach is to give Reported Guesses equal to the current mean Smarts Rating. With all players using this approach, the distribution collapses and error explodes. In general, Figure \ref{fig:MeanGuess} shows that the error introduced by Mean Guessing depends linearly on the number of players using the strategy.
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centerline{%
 \includegraphics[width=0.5\textwidth]{figures/robustness/Mean_Guessing31.png}%
 \includegraphics[width=0.5\textwidth] {figures/robustness/Mean_Guessing32.png}%
@@ -193,7 +193,7 @@ If the distribution of current Smarts Ratings is known at all times to all playe
 
 Another way that players may take advantage of a known distribution is via the Quantile Guessing strategy described above. The implementation of Quantile Guessing used for simulations uses the Empirical Cumulative Distribution Function with the sample composed of Actual Guesses of past opponents. A Reported Guess defaults to Actual Guesses if no Smarts Ratings have been determined, and for a player's first Luna Game. Ratings again collapse if all players use this strategy from the start, as shown in Figure \ref{fig:QuantileGuess}. 
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centerline{%
 \includegraphics[width=0.5\textwidth]{figures/robustness/Quantile_Guessing21.png}%
 \includegraphics[width=0.5\textwidth] {figures/robustness/Quantile_Guessing22.png}%
@@ -204,7 +204,7 @@ Another way that players may take advantage of a known distribution is via the Q
 
 If only a fraction of players use the strategy, the error depends linearly on the fraction, as was the case with Minimum and Mean Guessing. Figure \ref{fig:QuantileGuessFrac} confirms this result.
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centerline{%
 \includegraphics[width=0.5\textwidth]{figures/robustness/Quantile_Guessing31.png}%
 \includegraphics[width=0.5\textwidth] {figures/robustness/Quantile_Guessing32.png}%
@@ -213,9 +213,9 @@ If only a fraction of players use the strategy, the error depends linearly on th
 \label{fig:QuantileGuessFrac}
 \end{figure}
 
-What if the distribution is revealed once a certain number of games have been played? Perhaps the collapsing to a constant problem will be avoided? To test this hypothesis, the simulation in Figure \ref{fig:QuantileGuessDelay} introduces players that play with honest guessing for a variable number of time steps, and then play with Quantile Guessing for $500$ time steps. The delay in introducing Quantile Guessing does indeed improve the $L_1$ error within the time frame tested, though significant error remains after $500$ time steps for all tested delays. 
+What if the distribution is revealed once a certain number of games have been played? One might hope that the collapsing to a constant problem is avoided in this case. To test this hypothesis, the simulation in Figure \ref{fig:QuantileGuessDelay} introduces players that play with honest guessing for a variable number of time steps, and then play with Quantile Guessing for $500$ time steps. The delay in introducing Quantile Guessing does indeed improve the $L_1$ error within the time frame tested, though significant error remains after $500$ time steps for all tested delays. 
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centerline{%
 \includegraphics[width=0.5\textwidth]{figures/robustness/Delayed_Quantile_Guessing41.png}%
 \includegraphics[width=0.5\textwidth] {figures/robustness/Delayed_Quantile_Guessing42.png}%
@@ -228,7 +228,7 @@ What if the distribution is revealed once a certain number of games have been pl
 
 In a real instantiation of LRS, it is unlikely that any single strategy will be adopted by all players. Thus the extreme results portrayed above are not of urgent concern. More likely is a situation where a small fraction of players adopt each of the strategies above. For the purpose of simulation, I assume that some fraction of players will play honestly, and the remaining players will be evenly divided among the strategies described above: Random Guessing, Minimum Guessing, Mean Guessing, and Quantile Guessing. Figure \ref{fig:Combined} shows that the relationship between error and honest player proportion is linear, as might be expected given the previous simulations. Roughly, for every additional $10$\% of players that forgo honest guessing in favor of one of the other strategies, the mean $L_1$ error increases by $3.5$.
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centerline{%
 \includegraphics[width=0.5\textwidth]{figures/robustness/Combined_Dishonest_Strategies31.png}
 \includegraphics[width=0.5\textwidth] {figures/robustness/Combined_Dishonest_Strategies32.png}%
